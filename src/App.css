@@ -1,10 +1,47 @@
-.App {
+/*header*/
+.header{
+	font-family: 'Josefin Sans', sans-serif;
+	display: flex;
+	justify-content: space-between;
+	background: linear-gradient(-90deg, #7F0099, #0059B3);
+	margin-bottom: 2%;
+}
+.header__item{
+	margin: 20px;
+	color: #fff;
+}
+.highlight {
+  font-size: 20px;
+  color: orange;
+}
+/*header*/
+
+
+/*footer*/
+
+.fa.fa-heart {
+	color: red;
+}
+.footer {
+  text-align: center;
+	width: 100%;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    height: 5%;
+    background: linear-gradient(-90deg, #7F0099, #0059B3);
+}
+.footer-text {
+  font-size: 20px;
+  color: orange;
+  padding: 1%;
+}
+/*footer*/
+
+/* .App {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-}
 
 .App-header {
   background-color: #282c34;
@@ -15,8 +52,6 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
-}
+} */
 
-.App-link {
-  color: #09d3ac;
-}
+
