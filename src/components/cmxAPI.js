@@ -24,14 +24,15 @@ class cmxAPI {
         const resp = await axios.get(this.cmxUrl + "/api/location/v2/clients ", {
             auth: this.cmxAuth
         })
+        // console.log("newww",resp);
         return resp.data;
     }
-    displayConnectedCount(floorName){
+    getTotalConnectedCount(cb) {
         axios.get(this.cmxUrl + "/api/analytics/v1/now/connectedDetected", {
             auth: this.cmxAuth
         }).then(response => {
-            var res = response.find(e => e.area == floorName);
-            console.log("uy", res);
+            console.log(response)
+            return cb(response.data.total)
         })
     }
 }
