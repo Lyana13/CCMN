@@ -60,7 +60,7 @@ componentWillMount(){
         <Header />
         <Content />
         <Footer />
-        {/* <Chart chartData={this.state.chartData}/> */}
+        <Chart chartData={this.state.chartData}/>
         </Container>
       </React.Fragment>
     );

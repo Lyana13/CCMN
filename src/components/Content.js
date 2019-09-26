@@ -27,7 +27,8 @@ class Content extends React.Component  {
             activeUser: "",
             kpi: "",
             alalitics: "",
-            forecasting: ""
+            forecasting: "",
+            visitsCountMap: new Map()
         }
         this.updateTotalConnectedCount = this.updateTotalConnectedCount.bind(this);
         this.updateFloorImage = this.updateFloorImage.bind(this);
@@ -46,15 +47,30 @@ class Content extends React.Component  {
             if (oldClients.length == 0) {
                 oldClients = newClients;
             }
-            console.log("newww:",newClients);
+            // console.log("newww:",newClients);
             var newMacAdresses = this.getNewMacAdresses(oldClients, newClients);
             // console.log("newww",newMacAdresses);
             newMacAdresses.forEach(function(macAddr){
                 notifier.info("mac Address: " + macAddr, {});
             });
         }, 1000);
+        cmxAPI.getFloorsInfo(floorList => {
+            // console.log("floorList", floorList)
+
+            let visitsCountMap = new Map();
+                // visitsCountMap.set(floorList[0].name, floorList[0].aesUidString);
+                // visitsCountMap.set(floorList[1].name, floorList[1].aesUidString);
+                // visitsCountMap.set(floorList[2].name, floorList[2].aesUidString);
+                floorList.forEach(floor => {
+                    // console.log("floor", floor)
+                    visitsCountMap.set(floor.name, floor.aesUidString);
+                })
+                console.log("visitsCountMap", visitsCountMap)
+                this.setState({visitsCountMap: visitsCountMap});
+        });
     }
-    
+
+
     updateTotalConnectedCount() {
         cmxAPI.getTotalConnectedCount(total => this.setState({
             all: total.totalAll,
@@ -83,10 +99,17 @@ class Content extends React.Component  {
     };
     
     render(){
+        const floorName = this.state.selectedFloor.value,
+        floorId = this.state.visitsCountMap.get(floorName);
         return (
             <div >
             <Grid container spacing={2}>
             <Grid item xs={6} sm={9}>
+            <Select
+            value={this.state.selectedFloor}
+            onChange={this.handleFloorChange}
+            options={options}
+        />
             <div style={{
                 backgroundImage: "url(" + this.state.image + ")",
                 backgroundSize: 'cover',
@@ -95,43 +118,46 @@ class Content extends React.Component  {
                 position: 'absolute'
             }} id="content__map">
                 {
-                    this.state.clients.map(client => 
-                        <div style={{
+                    this.state.clients
+                    .filter(client => floorId == client.mapInfo.floorRefId)
+                    .map(client => {
+                        console.log("client",client);
+                        return <div style={{
                             width: 10,
                             height: 10,
                             borderRadius: 5,
-                            backgroundColor: 'black',
+                            backgroundColor: 'blue',
                             position: 'absolute',
                             left: client.mapCoordinate.x / 2 - 5,
                             top: client.mapCoordinate.y / 2 - 5
                         }}>
                         </div>
+                        }
                     )
                 }
             </div>
+            
         </Grid>
         <Grid item xs={6} sm={3}>
-        <Select
-            value={this.state.selectedFloor}
-            onChange={this.handleFloorChange}
-            options={options}
-        />
+        
         <ul className="list-group content-wrap-text">
             <li className="list-group-item list-group-item-action list-group-item-light">Connected: {this.state.connected}<strong><span id="inner1"></span></strong></li>
             <li className="list-group-item list-group-item-action list-group-item-light">All: {this.state.all}<strong><span id="inner2"></span></strong></li>
             <li className="list-group-item list-group-item-action list-group-item-light">Detected: {this.state.detected}<strong><span id="inner3"></span></strong></li>
             <li className="list-group-item list-group-item-action list-group-item-light">Active users: <strong><span id="inner4"></span></strong></li>
         </ul>
+        <ButtonGroup  vertical>
+                    <Button variant="outline-secondary">Active users: {this.state.activeUser}</Button>
+                    <Button variant="outline-secondary">KPI: {this.state.kpi}</Button>
+                    <Button variant="outline-secondary">Analitics and Presence: {this.state.alalitics}</Button>
+                    <Button variant="outline-secondary">Forecasting number of visitors: {this.state.forecasting}</Button>
+                </ButtonGroup>
         </Grid> 
     </Grid>
-          </div>
+          
  
-        //     <ButtonGroup  vertical>
-        //             <Button variant="outline-secondary">Active users: {this.state.activeUser}</Button>
-        //             <Button variant="outline-secondary">KPI: {this.state.kpi}</Button>
-        //             <Button variant="outline-secondary">Analitics and Presence: {this.state.alalitics}</Button>
-        //             <Button variant="outline-secondary">Forecasting number of visitors: {this.state.forecasting}</Button>
-        //         </ButtonGroup>
+            
+                </div>
         )
     }
 }

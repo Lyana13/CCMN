@@ -21,7 +21,7 @@ class Chart extends Component {
         return (
             <Container>
                 <Row>
-                    <Col item  sm={6} lg={6}>
+                    <Col item sm={6} lg={6}>
                 <Pie
                 data={this.state.chartData}
                 options={{ 
@@ -53,7 +53,7 @@ class Chart extends Component {
                 }}
             />
             </Col>
-            <Col item  sm={6} lg={12}>
+            <Col item  sm={6} lg={6}>
             <Bar
                 data={this.state.chartData}
                 options={{ 

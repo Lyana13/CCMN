@@ -31,8 +31,17 @@ class cmxAPI {
         axios.get(this.cmxUrl + "/api/analytics/v1/now/connectedDetected", {
             auth: this.cmxAuth
         }).then(response => {
-            console.log(response)
+            // console.log(response)
             return cb(response.data.total)
+        })
+    }
+
+    getFloorsInfo(cb) {
+        axios.get(this.cmxUrl + "/api/config/v1/maps/info/System Campus/UNIT.Factory/", {
+            auth: this.cmxAuth
+        }).then(response => {
+            // console.log("floorListdrugoy",response)
+            return cb(response.data.floorList)
         })
     }
 }
