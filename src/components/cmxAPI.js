@@ -7,7 +7,7 @@ class cmxAPI {
     cmxPass = "just4reading"
     presencePass = "Passw0rd"
     cmxAuth = {username: this.login, password: this.cmxPass}
-    presenceAuth = {username: this.login, password: this.presencePass}
+    presenceAuth = { username: this.login, password: this.presencePass }
 
     getFloorImage(floorName, cb) {
         axios.get(this.cmxUrl + "/api/config/v1/maps/image/System Campus/UNIT.Factory/" + floorName, {
@@ -27,6 +27,13 @@ class cmxAPI {
         // console.log("newww",resp);
         return resp.data;
     }
+    async getSitesIP(){
+        const response= await axios.get(this.presenceUrl + "/api/config/v1/sites", {
+            auth: this.presenceAuth
+        })
+        return response.data[0].aesUId;
+    }
+
     getTotalConnectedCount(cb) {
         axios.get(this.cmxUrl + "/api/analytics/v1/now/connectedDetected", {
             auth: this.cmxAuth
@@ -42,6 +49,24 @@ class cmxAPI {
         }).then(response => {
             // console.log("floorListdrugoy",response)
             return cb(response.data.floorList)
+        })
+    }
+
+    topDevicesMacers(sitesID, cb){
+        axios.get(this.presenceUrl + "/api/presence/v1/visitor/count/today?siteId=" + sitesID, {
+          auth: this.presenceAuth  
+        }).then(response => {
+            console.log("text1s", response)
+            return cb(response.data)
+        })
+    }
+    
+    getRange(start, end, cb) { 
+        axios.get(this.presenceUrl + "/api/presence/v1/connected/daily?siteId=1513804707441&startDate=" + start +"&endDate=" + end, {
+            auth: this.presenceAuth
+        }).then(response => {
+            console.log("flossssssssss",response)
+            return cb(response)
         })
     }
 }
