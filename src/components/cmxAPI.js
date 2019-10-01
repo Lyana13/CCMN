@@ -47,13 +47,13 @@ class cmxAPI {
         axios.get(this.cmxUrl + "/api/config/v1/maps/info/System Campus/UNIT.Factory/", {
             auth: this.cmxAuth
         }).then(response => {
-            // console.log("floorListdrugoy",response)
+             //console.log("floorListdrugoy",response)
             return cb(response.data.floorList)
         })
     }
 
     topDevicesMacers(sitesID, cb){
-        axios.get(this.presenceUrl + "/api/presence/v1/visitor/count/today?siteId=" + sitesID, {
+        axios.get(this.presenceUrl + "/api/presence/v1/visitor/count/yesterday?siteId=" + sitesID, {
           auth: this.presenceAuth  
         }).then(response => {
             console.log("text1s", response)
@@ -61,12 +61,12 @@ class cmxAPI {
         })
     }
     
-    getRange(start, end, cb) { 
+    getDailyConnectedCount(start, end, cb) { 
         axios.get(this.presenceUrl + "/api/presence/v1/connected/daily?siteId=1513804707441&startDate=" + start +"&endDate=" + end, {
             auth: this.presenceAuth
         }).then(response => {
-            console.log("flossssssssss",response)
-            return cb(response)
+            // console.log("flossssssssss",response.data)
+            return cb(response.data)
         })
     }
 }

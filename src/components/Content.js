@@ -34,6 +34,7 @@ class Content extends React.Component  {
         }
         this.updateTotalConnectedCount = this.updateTotalConnectedCount.bind(this);
         this.updateFloorImage = this.updateFloorImage.bind(this);
+
     }
 
     async componentDidMount() {
@@ -65,8 +66,9 @@ class Content extends React.Component  {
         let sitesID = await cmxAPI.getSitesIP();
         this.setState( {sitesID: sitesID} );
         console.log("UId", sitesID);
-       cmxAPI.topDevicesMacers(sitesID, data => console.log("cb", data));
-       cmxAPI.getRange("2019-09-04", "2019-09-06", cb => console.log("cb", cb));
+       cmxAPI.topDevicesMacers(sitesID, data => console.log("topDevicesMacers", data));
+       this.forcasting(4);
+       
     }
 
     updateTotalConnectedCount() {
@@ -96,18 +98,41 @@ class Content extends React.Component  {
         this.setState({ selectedFloor });
     };
 
-    // subTractDays(date, days){
-    //     date.setDate(date.getDate() - days);
-    //     return date;
-    // }
+    dateToString(date){
+        let day = date.getDate(),
+            month = date.getMonth(),
+            year = date.getFullYear();
 
-    // forCasting(days){
-    //     var array = [];
-    //     for(var i = 0;i <= days; i++){
-    //         var date = subTractDays(new Date(), i);
-    //         array.push(date);
-    //     }
-    // }
+        return year + "-" + month + "-" + day;
+     
+    }
+
+    forcasting(weeks) {
+        let days = weeks * 7;
+        let endDate = new Date();
+        let startDate = new Date();
+        startDate.setDate(startDate.getDate() - days);
+        startDate = this.dateToString(startDate);
+        endDate = this.dateToString(endDate);
+        console.log("star", startDate, "end", endDate);
+        cmxAPI.getDailyConnectedCount(startDate, endDate, data => {
+            let map = new Map();
+            data = Object.entries(data);
+            data.forEach(e => {
+                let dayOfWeek = new Date(e[0]).getDay();
+                console.log(dayOfWeek, e[1])
+                let value = map.get(dayOfWeek) || 0;
+                //if(value == undefined){
+                //    value = 0;
+                //}
+                value += e[1];
+                map.set(dayOfWeek, value);
+            })
+            //onsole.log("getDailyConnectedCount", data)
+            console.log("map",map);
+        
+        });
+    }
 
     render(){
         const floorName = this.state.selectedFloor.value,
