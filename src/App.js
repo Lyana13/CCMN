@@ -24,32 +24,7 @@ componentWillMount(){
   getChartData(){
     //Ajax calls
     this.setState({
-      chartData:{
-        labels:['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-        datasets:[
-            {
-                label:'Population',
-                data:[
-                    550,
-                    500,
-                    400,
-                    700,
-                    500,
-                    800,
-                    300
-                ],
-                backgroundColor:[
-                    'rgba(102,51,153,1)',
-                    'rgba(102,51,153,1)',
-                    'rgba(102,51,153,1)',
-                    'rgba(102,51,153,1)',
-                    'rgba(255, 66, 33, 0.8)',
-                    'rgba(255, 66, 33, 0.8)',
-                    'rgba(255, 66, 33, 0.8)'
-                ]
-            }
-        ]
-    }
+      
     });
   }
 
