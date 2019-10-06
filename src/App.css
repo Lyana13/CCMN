@@ -1,3 +1,4 @@
+
 /*header*/
 
 .header{
@@ -14,10 +15,17 @@
 .highlight {
   font-size: 20px;
   color: orange;
+  word-break: break-word;
+  font-weight: 600;
 }
 /*header*/
-
-
+.main{
+  background-repeat-y: no-repeat;
+  background-image: url(https://watsp.me/wp-content/uploads/2018/01/poligon-2560x1600-4k-hd-cvetnoy-zeleniy-fon-225.jpg);
+}
+.sel {
+  margin: 50% 50px;
+}
 /*footer*/
 
 .fa.fa-heart {

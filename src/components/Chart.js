@@ -7,7 +7,7 @@ class Chart extends Component {
     constructor(props){
         super(props);
         this.state = {
-            chartData:[]  
+            chartData:[]
         }
     }
 
@@ -18,7 +18,7 @@ class Chart extends Component {
     static defaultProps = {
         displayTitle: true,
         displayLegend: true,
-        legendPosition: 'right',
+        legendPosition: 'bottom',
         location:'City'
     }
 
@@ -27,7 +27,6 @@ class Chart extends Component {
             month = date.getMonth(),
             year = date.getFullYear();
         return year + "-" + month + "-" + day;
-     
     }
 
     forcasting(weeks) {
@@ -36,28 +35,23 @@ class Chart extends Component {
         let startDate = new Date();
         startDate.setDate(startDate.getDate() - days);
         startDate = this.dateToString(startDate);
+        console.log("startDate",startDate);
         endDate = this.dateToString(endDate);
-        //console.log("star", startDate, "end", endDate);
         cmxAPI.getDailyConnectedCount(startDate, endDate, data => {
             let map = new Map();
             data = Object.entries(data);
             data.forEach(e => {
                 let dayOfWeek = new Date(e[0]).getDay();
-                //console.log(dayOfWeek, e[1])
+                // console.log("tut",dayOfWeek, e[1])
                 let value = map.get(dayOfWeek) || 0;
-                //if(value == undefined){
-                //    value = 0;
-                //}
                 value += e[1];
                 map.set(dayOfWeek, value);
             })
-            // map = map.entries().map(e => console.log(e));
+            //  map = map.entries().map(e => console.log("ЭЭб",e));
             let map2 = new Map();
             map.forEach((value, key) => map2.set(key, Math.round(value / weeks)));
-
-            //onsole.log("getDailyConnectedCount", data)
             console.log("map",map, map2);
-        
+            this.setState( {chartData: [map2.get(0), map2.get(1), map2.get(2), map2.get(3), map2.get(4), map2.get(5), map2.get(6)]} )
         });
     }
 
@@ -103,16 +97,16 @@ class Chart extends Component {
                     labels:['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
                     datasets:[
                         {
-                            label:'Population',
+                            label:'Number of visitors',
                             data: this.state.chartData,
                             backgroundColor:[
                                 'rgba(102,51,153,1)',
                                 'rgba(102,51,153,1)',
                                 'rgba(102,51,153,1)',
                                 'rgba(102,51,153,1)',
-                                'rgba(255, 66, 33, 0.8)',
-                                'rgba(255, 66, 33, 0.8)',
-                                'rgba(255, 66, 33, 0.8)'
+                                'rgba(102,51,153,1)',
+                                'rgba(102,51,153,1)',
+                                'rgba(102,51,153,1)'
                             ]
                         }
                     ]
@@ -120,7 +114,7 @@ class Chart extends Component {
                 options={{ 
                     title:{
                         display:this.props.displayTitle,
-                        text: 'Correlation between day of the week',
+                        text: 'Forecasting number of visitors for next week',
                         fontSize: 25
                     },
                     legend:{

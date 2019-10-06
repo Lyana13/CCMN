@@ -1,7 +1,8 @@
 import React from "react";
-import {Container, Row, Col, Button, Tabs,  Tab, Nav, ButtonGroup,DropdownButton, Dropdown } from "react-bootstrap";
+import { Button, Tabs,  Tab, Nav, ButtonGroup, Card, Accordion } from "react-bootstrap";
 import cmxAPI from "./cmxAPI";
 import Select from 'react-select';
+import DwellChart from "./DwellChart";
 import AWN from 'awesome-notifications';
 import "awesome-notifications/dist/style.css";
 import Grid from '@material-ui/core/Grid';
@@ -11,6 +12,16 @@ const options = [
     { value: '1st_Floor', label: 'First' },
     { value: '2nd_Floor', label: 'Second' },
     { value: '3rd_Floor', label: 'Third' },
+  ];
+  const optionsRange = [
+    { value: 'Today', label: 'Today' },
+    { value: 'Yesterday', label: 'Yesterday' },
+    { value: 'Last 3 Days', label: 'Last 3 Days' },
+    { value: 'Last 7 Days', label: 'Last 7 Days' },
+    { value: 'Last 30 Days', label: 'Last 30 Days' },
+    { value: 'This Month', label: 'This Month' },
+    { value: 'Last Month', label: 'Last Month' },
+    { value: 'Custom Date', label: 'Custom Date' },
   ];
 
 class Content extends React.Component  {
@@ -30,16 +41,17 @@ class Content extends React.Component  {
             alalitics: "",
             forecasting: "",
             visitsCountMap: new Map(),
-            sitesID: ""
+            sitesID: "",
+            selectedRange: { value: 'Today', label: 'Today' }
         }
         this.updateTotalConnectedCount = this.updateTotalConnectedCount.bind(this);
         this.updateFloorImage = this.updateFloorImage.bind(this);
-
     }
 
     async componentDidMount() {
         this.updateFloorImage(this.state.selectedFloor.value);
         this.updateTotalConnectedCount();
+        this.sit();
         let notifier = new AWN({});
         setInterval(async () => {
             this.updateTotalConnectedCount();
@@ -51,8 +63,8 @@ class Content extends React.Component  {
                 oldClients = newClients;
             }
             var newMacAdresses = this.getNewMacAdresses(oldClients, newClients);
-            newMacAdresses.forEach(function(macAddr){
-                notifier.info("mac Address: " + macAddr, {});
+            newMacAdresses.forEach(macAddr => {
+                notifier.info("Hi, @xlogin or mac: " + macAddr + " now is on the " + this.state.selectedFloor.label.toLowerCase() + " floor", {});
             });
         }, 1000);
         cmxAPI.getFloorsInfo(floorList => {
@@ -67,9 +79,14 @@ class Content extends React.Component  {
         this.setState( {sitesID: sitesID} );
         console.log("UId", sitesID);
        cmxAPI.topDevicesMacers(sitesID, data => console.log("topDevicesMacers", data));
-       
+       cmxAPI.newF(cs => console.log("newee", cs));
+        
     }
-
+    sit(){
+        cmxAPI.getActiveClients(cb => this.setState({
+            activeUser: cb.data
+        }));
+    }
     updateTotalConnectedCount() {
         cmxAPI.getTotalConnectedCount(total => this.setState({
             all: total.totalAll,
@@ -82,6 +99,17 @@ class Content extends React.Component  {
         cmxAPI.getFloorImage(Floor, image => this.setState({ image }));
     }
 
+
+    handleFloorChange = selectedFloor => {
+        this.updateFloorImage(selectedFloor.value);
+        this.setState({ selectedFloor });
+    };
+
+    handleRangeChange = selectedRange => {
+        // this.updateRangeDays(selectedRange.value);
+        this.setState({ selectedRange });
+    }
+
     macAdressesFromClients(clients) {
         return clients.map(client => client.macAddress);
     }
@@ -92,69 +120,88 @@ class Content extends React.Component  {
         return updatedClients.filter(e => !oldClients.includes(e));
     }
 
-    handleFloorChange = selectedFloor => {
-        this.updateFloorImage(selectedFloor.value);
-        this.setState({ selectedFloor });
-    };
-
-  
-
     render(){
         const floorName = this.state.selectedFloor.value,
         floorId = this.state.visitsCountMap.get(floorName);
-        return (
-            <div >
+        return (   
+        <div className="main">
             <Grid container spacing={2}>
-            <Grid item xs={6} sm={9}>
-            <Select
-            value={this.state.selectedFloor}
-            onChange={this.handleFloorChange}
-            options={options}
-        />
-            <div style={{
-                backgroundImage: "url(" + this.state.image + ")",
-                backgroundSize: 'cover',
-                width: 775,
-                height: 385,
-                position: 'absolute'
-            }} id="content__map">
-                {
-                    this.state.clients
-                    .filter(client => floorId == client.mapInfo.floorRefId)
-                    .map(client => {
-                        // console.log("client",client);
-                        return <div key={client.macAddress} style={{
-                            width: 10,
-                            height: 10,
-                            borderRadius: 5,
-                            backgroundColor: 'blue',
-                            position: 'absolute',
-                            left: client.mapCoordinate.x / 2 - 5,
-                            top: client.mapCoordinate.y / 2 - 5
-                        }}>
-                        </div>
+                <Grid>
+                    <div style={{
+                        backgroundImage: "url(" + this.state.image + ")",
+                        backgroundSize: 'cover',
+                        width: 775,
+                        height: 385,
+                        position: 'absolute',
+                        margin: "0% 4%",
+                    }} id="content__map">
+                        {this.state.clients
+                            .filter(client => floorId == client.mapInfo.floorRefId)
+                            .map(client => {
+                                return <div key={client.macAddress} style={{
+                                    width: 10,
+                                    height: 10,
+                                    borderRadius: 5,
+                                    backgroundColor: 'blue',
+                                    position: 'absolute',
+                                    left: client.mapCoordinate.x / 2 - 5,
+                                    top: client.mapCoordinate.y / 2 - 5
+                                }}>
+                                </div>
+                                }
+                            )
                         }
-                    )
-                }
-            </div>
-            
+                    </div>
+                </Grid>
+        <Grid item xs={6} sm={9} >
+            <div className="sel">
+                <Select 
+                value={this.state.selectedFloor}
+                onChange={this.handleFloorChange}
+                options={options}
+            />
+            <Select 
+                value={this.state.selectedRange}
+                onChange={this.handleRangeChange}
+                options={optionsRange}
+            />
+            </div>   
         </Grid>
         <Grid item xs={6} sm={3}>
-        <ul className="list-group content-wrap-text">
-            <li className="list-group-item list-group-item-action list-group-item-light">Connected: {this.state.connected}<strong><span id="inner1"></span></strong></li>
-            <li className="list-group-item list-group-item-action list-group-item-light">All: {this.state.all}<strong><span id="inner2"></span></strong></li>
-            <li className="list-group-item list-group-item-action list-group-item-light">Detected: {this.state.detected}<strong><span id="inner3"></span></strong></li>
-            <li className="list-group-item list-group-item-action list-group-item-light">Active users: <strong><span id="inner4"></span></strong></li>
-        </ul>
-        <ButtonGroup  vertical>
-            <Button variant="outline-secondary">Active users: {this.state.activeUser}</Button>
-            <Button variant="outline-secondary">KPI: {this.state.kpi}</Button>
-            <Button variant="outline-secondary">Analitics and Presence: {this.state.alalitics}</Button>
-            <Button variant="outline-secondary">Forecasting number of visitors: {this.state.forecasting}</Button>
+            <ul className="list-group content-wrap-text">
+                <li className="list-group-item list-group-item-action list-group-item-light">Connected: <span className="highlight">{this.state.connected}</span><strong><span id="inner1"></span></strong></li>
+                <li className="list-group-item list-group-item-action list-group-item-light">All: <span className="highlight">{this.state.all}</span><strong><span id="inner2"></span></strong></li>
+                <li className="list-group-item list-group-item-action list-group-item-light">Detected: <span className="highlight">{this.state.detected}</span><strong><span id="inner3"></span></strong></li>
+                <Accordion defaultActiveKey="0">
+                <Card>
+                    <Accordion.Toggle as={Card.Header} eventKey="0">
+                    Show me Active users: 
+                    </Accordion.Toggle>
+                    <Accordion.Collapse eventKey="0">
+                    <Card.Body><li className="list-group-item list-group-item-action list-group-item-light">Active users: <span className="highlight"></span><strong><span id="inner4"></span></strong></li></Card.Body>
+                    </Accordion.Collapse>
+                </Card>
+                <Card>
+                    <Accordion.Toggle as={Card.Header} eventKey="1">
+                    Click me!
+                    </Accordion.Toggle>
+                    <Accordion.Collapse eventKey="1">
+                    <Card.Body>Hello! I'm another body</Card.Body>
+                    </Accordion.Collapse>
+                </Card>
+                </Accordion>
+            </ul>
+            <ButtonGroup  vertical>
+                <Button variant="outline-secondary">Active users: </Button>
+                <Button variant="outline-secondary">KPI: {this.state.kpi}</Button>
+                <Button variant="outline-secondary">Analitics and Presence: {this.state.alalitics}</Button>
+                <Button variant="outline-secondary">Forecasting number of visitors: {this.state.forecasting}</Button>
             </ButtonGroup>
         </Grid> 
     </Grid>
-            </div>
+    <DwellChart range={this.state.selectedRange.value} />
+    </div>
+           
         )
     }
 }
