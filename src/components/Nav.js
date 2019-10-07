@@ -1,35 +1,41 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Container} from "@material-ui/core";
+import Box from '@material-ui/core/Box';
+
+
 
 function Nav() {
     const navStyle = {
-        color: 'red'
+        color: 'white',
     }
 
+
     return (
-        <nav>
-            <h3>hello</h3>
-            <ul className="nav-links">
-                <Link style={navStyle} to="/picker">
-                    <li>picker</li>
+        <Container>
+            <Box width="100%" display="flex" justifyContent="space-around">
+            <Box p={1} bgcolor="secondary.main">
+            <Link style={navStyle} to="/chart">
+                <strong>Forcasting</strong>
+            </Link>
+            </Box>
+                <Box p={1} bgcolor="grey.300">
+                <Link style={navStyle} to="/dwell_chart">
+                    <strong>dwell_chat</strong>
                 </Link>
-                <Link to="/chart">
-                    <li>chart</li>
+                </Box>
+                <Box p={1}  bgcolor="secondary.main">
+                <Link style={navStyle} to="/analitics">
+                    <strong>analitics</strong>
                 </Link>
-                <Link to="/dwell_chart">
-                    <li>dwell_chat</li>
+                </Box>
+                <Box p={1} bgcolor="grey.300">
+                <Link style={navStyle} to="/content">
+                    <strong>content</strong>
                 </Link>
-                <Link to="/picker">
-                    <li>picker</li>
-                </Link>
-                <Link to="/analitics">
-                    <li>analitics</li>
-                </Link>
-                <Link to="/content">
-                    <li>content</li>
-                </Link>
-            </ul>
-        </nav>
+                </Box>
+            </Box>  
+        </Container>
     );
 }
 

@@ -5,6 +5,7 @@ import Footer from "./components/Footer.js";
 import Content from "./components/Content.js";
 import Chart from "./components/Chart";
 import Nav from "./components/Nav.js";
+import Map from "./components/Map.js";
 import Analitics from "./components/Analitics";
 import { Container } from "@material-ui/core";
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';

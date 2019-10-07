@@ -6,6 +6,7 @@ import DwellChart from "./DwellChart";
 import AWN from 'awesome-notifications';
 import "awesome-notifications/dist/style.css";
 import Grid from '@material-ui/core/Grid';
+import Calendar from 'react-calendar'
 
 
 const options = [
@@ -42,7 +43,8 @@ class Content extends React.Component  {
             forecasting: "",
             visitsCountMap: new Map(),
             sitesID: "",
-            selectedRange: { value: 'Today', label: 'Today' }
+            selectedRange: { value: 'Today', label: 'Today' },
+            displayCalendar: "none"
         }
         this.updateTotalConnectedCount = this.updateTotalConnectedCount.bind(this);
         this.updateFloorImage = this.updateFloorImage.bind(this);
@@ -106,8 +108,11 @@ class Content extends React.Component  {
     };
 
     handleRangeChange = selectedRange => {
+        let displayCalendar = "none";
+        if(selectedRange.value == "Custom Date")
+            displayCalendar = "block";
         // this.updateRangeDays(selectedRange.value);
-        this.setState({ selectedRange });
+        this.setState({ selectedRange, displayCalendar});
     }
 
     macAdressesFromClients(clients) {
@@ -200,6 +205,26 @@ class Content extends React.Component  {
         </Grid> 
     </Grid>
     <DwellChart range={this.state.selectedRange.value} />
+    <div style={{boxShadow: "5px 5px 25px", width: "350px", boxShadow: "5px 5px 25px", display: this.state.displayCalendar }}>
+                <div onClick={this.reset}>
+                    <Calendar 
+                    onChange={this.onChange}
+                    selectRange={true}
+                    value={this.state.date}
+                    />
+                </div>
+                {/* <p>Date choose: {this.state.date.toLocaleDateString()}</p> */}
+                <button onClick={this.validation}>Valid</button>
+                {this.state.showDate ? (
+                    <div>
+                        <p>Yes: {this.state.date[0].toLocaleDateString()}</p>
+                        <p>No: {this.state.date[1].toLocaleDateString()}</p>
+                    </div>
+
+                ) : null}
+                 {/* <DwellChart calendar={this.state.date} /> */}
+                 
+            </div>
     </div>
            
         )
