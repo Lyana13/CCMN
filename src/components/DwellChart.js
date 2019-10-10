@@ -1,7 +1,9 @@
 import React, {Component} from "react";
 import cmxAPI from "./cmxAPI";
-import {Bar, Pie, Line} from 'react-chartjs-2';
-import {Container, Row, Col} from "react-bootstrap";
+import {Line} from 'react-chartjs-2';
+import {Container} from "react-bootstrap";
+import Grid from '@material-ui/core/Grid';
+
 
 
 class DwellChart extends Component {
@@ -18,6 +20,7 @@ class DwellChart extends Component {
             thirtyToSixtyMinutes: []
         }
     }
+    
     onChange = date => {
       this.setState({
           date
@@ -28,7 +31,7 @@ class DwellChart extends Component {
       this.setState({
           showDate: true
       })
-      console.log(this.state.date);
+      // console.log(this.state.date);
   }
   reset = () => {
       this.setState({
@@ -42,7 +45,7 @@ class DwellChart extends Component {
     }
   
     componentDidUpdate(prevProps){
-      if(this.props.range != prevProps.range) 
+      if(this.props.range !== prevProps.range) 
       {
         this.updateRangeDays(this.props.range);
       }
@@ -57,25 +60,25 @@ class DwellChart extends Component {
     updateRangeDays(days){
       // cmxAPI.dwellDailyLastmonth(cb => console.log(cb));
       // cmxAPI.dwellDailyLastweek(cb => console.log(cb));
-      if(days == "Today"){
+      if(days === "Today"){
         this.dwellHourlyToday();
       }
-      else if(days == "Yesterday") {
+      else if(days === "Yesterday") {
         this.dwellHourlyYesterday()
       }
-      else if (days == "Last 3 Days") {
+      else if (days === "Last 3 Days") {
         this.dwellHourlyTime3days()
       }
-      else if (days == "Last 7 Days") {
+      else if (days === "Last 7 Days") {
         this.dwellDailyTime7days()
       }
-      else if (days == "Last 30 Days") {
+      else if (days === "Last 30 Days") {
         this.dweellDailyTime30days()
       }
-      else if (days == "This Month"){
+      else if (days === "This Month"){
         this.dwellDailyThisMonth()
       }
-      else if (days == "Last Month") {
+      else if (days === "Last Month") {
         this.dwellDailyLastMonth()
       }
       // else {
@@ -94,10 +97,10 @@ class DwellChart extends Component {
     // }
 
     commonDwellHourly(data){
-      console.log("DATA",data);
+      //  console.log("DATA",data);
       let keys = Object.keys(data);
       data = Object.values(data);
-      console.log("KEYS",keys);
+      // console.log("KEYS",keys);
       const eightPlusHours =  data.map(e => e.EIGHT_PLUS_HOURS);
       const fiveToEightHours = data.map(e => e.FIVE_TO_EIGHT_HOURS);
       const fiveToThirtyMinutes = data.map(e => e.FIVE_TO_THIRTY_MINUTES);
@@ -113,8 +116,8 @@ class DwellChart extends Component {
       });
     }
     getLabelForThreeDays(data){
-      let value = Object.values(data);
-      console.log("ddddddddd", Object.keys(value));
+      // let value = Object.values(data);
+      // console.log("ddddddddd", Object.keys(value));
       // console.log("ddddddddd", Object.keys(data));
     }
     dwellHourlyToday(){
@@ -131,13 +134,13 @@ class DwellChart extends Component {
     }
 
     dwellHourlyTime3days(){
-      cmxAPI.dwellHourlyThreeToday(data => {
+      cmxAPI.dwellHourlyThreeDays(data => {
          this.getLabelForThreeDays(data)
       });
     }
     dwellDailyTime7days(){
       cmxAPI.dwellDailyLastweek(data => {
-        console.log("n",data);
+        // console.log("n",data);
       });
     }
     dweellDailyTime30days(){
@@ -165,7 +168,7 @@ class DwellChart extends Component {
     dwellDailyLastMonth(){
       let start = new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1);
       let end = new Date(new Date().getFullYear(), new Date().getMonth(), 0);
-      console.log("start-end", start, end);
+      // console.log("start-end", start, end);
       // cmxAPI.dwellDaily(start, end, data => {
         cmxAPI.dwellDaily(start, end, data => {
           this.commonDwellHourly(data);
@@ -180,9 +183,9 @@ class DwellChart extends Component {
     render (){
         return (
             <Container>
-            <Row>
-            <Col>
-                <h2>Line Example</h2>
+             <Grid container spacing={1}>
+             <Grid item xs={8} sm={8}>
+                <h2>Dwell Time</h2>
                 <Line ref="chart" data={
                     {
                         labels: this.state.labels,
@@ -295,9 +298,11 @@ class DwellChart extends Component {
                         ]
                       }
                 } />
-                 
-            </Col>
-            </Row>
+                </Grid>
+                <Grid item xs={8} sm={8}>
+                fllfl
+                </Grid>
+             </Grid>
             </Container>
         )
     }

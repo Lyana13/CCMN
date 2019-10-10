@@ -1,42 +1,112 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Container} from "@material-ui/core";
+import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+import { Container } from '@material-ui/core';
+import { Link } from 'react-router-dom';
+import FaceTwoToneIcon from '@material-ui/icons/FaceTwoTone';
+import BarChartTwoToneIcon from '@material-ui/icons/BarChartTwoTone';
+import RoomSharpIcon from '@material-ui/icons/RoomSharp';
+import EqualizerIcon from '@material-ui/icons/Equalizer';
+import TrendingUpIcon from '@material-ui/icons/TrendingUp';
+import PieChartIcon from '@material-ui/icons/PieChart';
+import ImportContactsIcon from '@material-ui/icons/ImportContacts';
 
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
 
-
-function Nav() {
-    const navStyle = {
-        color: 'white',
-    }
-
-
-    return (
-        <Container>
-            <Box width="100%" display="flex" justifyContent="space-around">
-            <Box p={1} bgcolor="secondary.main">
-            <Link style={navStyle} to="/chart">
-                <strong>Forcasting</strong>
-            </Link>
-            </Box>
-                <Box p={1} bgcolor="grey.300">
-                <Link style={navStyle} to="/dwell_chart">
-                    <strong>dwell_chat</strong>
-                </Link>
-                </Box>
-                <Box p={1}  bgcolor="secondary.main">
-                <Link style={navStyle} to="/analitics">
-                    <strong>analitics</strong>
-                </Link>
-                </Box>
-                <Box p={1} bgcolor="grey.300">
-                <Link style={navStyle} to="/content">
-                    <strong>content</strong>
-                </Link>
-                </Box>
-            </Box>  
-        </Container>
-    );
+  return (
+    <Typography
+      component="div"
+      role="tabpanel"
+      hidden={value !== index}
+      id={`scrollable-force-tabpanel-${index}`}
+      aria-labelledby={`scrollable-force-tab-${index}`}
+      {...other}
+    >
+      <Box p={3}>{children}</Box>
+    </Typography>
+  );
 }
 
-export default Nav;
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.any.isRequired,
+  value: PropTypes.any.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `scrollable-force-tab-${index}`,
+    'aria-controls': `scrollable-force-tabpanel-${index}`,
+  };
+}
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    flexGrow: 1,
+    width: '100%',
+    backgroundColor: theme.palette.background.paper,
+  },
+}));
+
+export default function ScrollableTabsButtonForce() {
+  const classes = useStyles();
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  return (
+      <Container>
+    <div className={classes.root}>
+      <AppBar position="static" color="default">
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          variant="scrollable"
+          scrollButtons="on"
+          indicatorColor="primary"
+          textColor="primary"
+          aria-label="scrollable force tabs example"
+        >
+          <Tab component={Link} to="/floor" label="Floors" icon={<BarChartTwoToneIcon />} {...a11yProps(5)} />
+          <Tab component={Link} to="/content" label="Dwell Time" icon={<RoomSharpIcon />} {...a11yProps(6)} />
+          <Tab component={Link} to="/chart" label="Forecasting" icon={<PieChartIcon />} {...a11yProps(5)} />
+          <Tab component={Link} to="/active" label="active users" icon={<FaceTwoToneIcon />} {...a11yProps(0)} />
+          <Tab component={Link} to="/home" label="home" icon={<FaceTwoToneIcon />} {...a11yProps(0)} />
+          <Tab label="Analytics and Presence" icon={<EqualizerIcon />} {...a11yProps(3)} />
+          <Tab label="Correlations" icon={<TrendingUpIcon />} {...a11yProps(4)} />
+          <Tab component={Link} to="/repeat_visitors" label="RepeatVisitors" icon={<ImportContactsIcon />} {...a11yProps(6)} />
+          <Tab component={Link} to="/kpi" label="KPi" icon={<FaceTwoToneIcon />} {...a11yProps(0)} />
+        </Tabs>
+      </AppBar>
+      <TabPanel  value={value} index={0}>
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+       
+      </TabPanel>
+      <TabPanel value={value} index={3}>
+       
+      </TabPanel>
+      <TabPanel value={value} index={4}>
+        
+      </TabPanel>
+      <TabPanel value={value} index={5}>
+       
+      </TabPanel>
+      <TabPanel value={value} index={6}>
+        
+      </TabPanel>
+    </div>
+    </Container>
+  );
+}

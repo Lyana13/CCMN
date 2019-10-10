@@ -35,7 +35,7 @@ class Chart extends Component {
         let startDate = new Date();
         startDate.setDate(startDate.getDate() - days);
         startDate = this.dateToString(startDate);
-        console.log("startDate",startDate);
+        // console.log("startDate",startDate);
         endDate = this.dateToString(endDate);
         cmxAPI.getDailyConnectedCount(startDate, endDate, data => {
             let map = new Map();
@@ -50,7 +50,7 @@ class Chart extends Component {
             //  map = map.entries().map(e => console.log("ЭЭб",e));
             let map2 = new Map();
             map.forEach((value, key) => map2.set(key, Math.round(value / weeks)));
-            console.log("map",map, map2);
+            // console.log("map",map, map2);
             this.setState( {chartData: [map2.get(0), map2.get(1), map2.get(2), map2.get(3), map2.get(4), map2.get(5), map2.get(6)]} )
         });
     }
@@ -59,39 +59,7 @@ class Chart extends Component {
         return (
             <Container>
                 <Row>
-                    {/* <Col item sm={6} lg={6}>
-                <Pie
-                data={this.state.chartData}
-                options={{ 
-                    title:{
-                        display:this.props.displayTitle,
-                        text: 'Correlation between visitors and device manufactures',
-                        fontSize: 25
-                    },
-                    legend:{
-                        display:this.props.displayLegend,
-                        position:this.props.legendPosition
-                    }
-                }}
-            />
-            </Col>
-            <Col item sm={6} lg={6}>
-            <Line
-                data={this.state.chartData}
-                options={{ 
-                    title:{
-                        display:this.props.displayTitle,
-                        text: 'Forecasting number of visitors(7 days)',
-                        fontSize: 25
-                    },
-                    legend:{
-                        display:this.props.displayLegend,
-                        position:this.props.legendPosition
-                    }
-                }}
-            />
-            </Col> */}
-            <Col item  sm={6} lg={6}>
+            <Col item  sm={12} md={6} lg={6}>
             <Bar
                 data = {{
                     labels:['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
@@ -115,6 +83,72 @@ class Chart extends Component {
                     title:{
                         display:this.props.displayTitle,
                         text: 'Forecasting number of visitors for next week',
+                        fontSize: 25
+                    },
+                    legend:{
+                        display:this.props.displayLegend,
+                        position:this.props.legendPosition
+                    }
+                }}
+            />
+            </Col>
+            <Col item sm={12} lg={6}>
+            <Line
+               data = {{
+                labels:['DAILY', 'FIRST_TIME', 'OCCASIONAL', 'WEEKLY', 'YESTERDAY'],
+                datasets:[
+                    {
+                        label:'Number of visitors',
+                        data: this.state.chartData,
+                        backgroundColor:[
+                            'rgba(102,51,153,1)',
+                            'rgba(102,51,153,1)',
+                            'rgba(102,51,153,1)',
+                            'rgba(102,51,153,1)',
+                            'rgba(102,51,153,1)',
+                            'rgba(102,51,153,1)',
+                            'rgba(102,51,153,1)'
+                        ]
+                    }
+                ]
+            }}
+                options={{ 
+                    title:{
+                        display:this.props.displayTitle,
+                        text: 'Forecasting number of visitors(7 days)',
+                        fontSize: 25
+                    },
+                    legend:{
+                        display:this.props.displayLegend,
+                        position:this.props.legendPosition
+                    }
+                }}
+            />
+            </Col>
+            <Col item sm={12} lg={6}>
+                <Pie
+                data = {{
+                    labels:['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+                    datasets:[
+                        {
+                            label:'Number of visitors',
+                            data: this.state.chartData,
+                            backgroundColor:[
+                                'rgba(102,51,153,1)',
+                                'rgba(102,51,153,1)',
+                                'rgba(102,51,153,1)',
+                                'rgba(102,51,153,1)',
+                                'rgba(102,51,153,1)',
+                                'rgba(102,51,153,1)',
+                                'rgba(102,51,153,1)'
+                            ]
+                        }
+                    ]
+                }}
+                options={{ 
+                    title:{
+                        display:this.props.displayTitle,
+                        text: 'Correlation between visitors and device manufactures',
                         fontSize: 25
                     },
                     legend:{
