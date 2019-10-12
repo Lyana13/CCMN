@@ -77,17 +77,20 @@ class RepeatVisitors extends Component {
             YESTERDAY:yesterday,
             // labels: keys
         });
-      }
+    }
+
     repeatVisitorsToday(){
         cmxAPI.repeatVisitorsToday(data => {
             this.commonRepeatVisitors(data)
         });
     }
+
     repeatVisitorsYesterday(){
         cmxAPI.repeatVisitorsYesterday(data => {
             this.commonRepeatVisitors(data)
         });
     }
+    
     repeatVisitorsThreeDays(){
         cmxAPI.repeatVisitorsThreeDays(data => {
             this.commonRepeatVisitors(data)

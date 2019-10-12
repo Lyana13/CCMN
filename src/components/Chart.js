@@ -35,19 +35,17 @@ class Chart extends Component {
         let startDate = new Date();
         startDate.setDate(startDate.getDate() - days);
         startDate = this.dateToString(startDate);
-        // console.log("startDate",startDate);
         endDate = this.dateToString(endDate);
         cmxAPI.getDailyConnectedCount(startDate, endDate, data => {
             let map = new Map();
             data = Object.entries(data);
             data.forEach(e => {
                 let dayOfWeek = new Date(e[0]).getDay();
-                // console.log("tut",dayOfWeek, e[1])
+                console.log("tut",dayOfWeek, e[1])
                 let value = map.get(dayOfWeek) || 0;
                 value += e[1];
                 map.set(dayOfWeek, value);
             })
-            //  map = map.entries().map(e => console.log("ЭЭб",e));
             let map2 = new Map();
             map.forEach((value, key) => map2.set(key, Math.round(value / weeks)));
             // console.log("map",map, map2);

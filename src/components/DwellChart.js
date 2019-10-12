@@ -126,7 +126,6 @@ class DwellChart extends Component {
           // const FIVE_TO_THIRTY_MINUTES =  console.log("pref2", Object.values(data).map(e => e.FIVE_TO_THIRTY_MINUTES));
         });
     }
-   
     dwellHourlyYesterday(){
       cmxAPI.dwellHourlyYesterday(data => {
         this.commonDwellHourly(data)

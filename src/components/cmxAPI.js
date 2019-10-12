@@ -208,7 +208,7 @@ totalVisitorsToday(cb){
         })
     }
 
-    /* */
+    /* proxi*/
     proximitySummaryToday(cb){
         axios.get(this.presenceUrl + "/api/presence/v1/kpisummary//today?siteId=1513804707441", {
             auth: this.presenceAuth
@@ -257,6 +257,21 @@ totalVisitorsToday(cb){
             auth: this.presenceAuth
         }).then(response => {
             return cb(response)
+        })
+    }
+
+    /*correlation*/
+    async dwellAverageforCorelation(date){
+       let res = await axios.get(this.presenceUrl + "/api/presence/v1/dwell/average?date=" + date + "&siteId=1513804707441", {
+            auth: this.presenceAuth
+        })
+        return res.data;
+    }
+    dailyVisitors(startDate, endDate, cb){
+        axios.get(this.presenceUrl + "/api/presence/v1/visitor/daily?startDate=" + startDate + "&endDate=" + endDate + "&siteId=1513804707441", {
+            auth: this.presenceAuth
+        }).then(response => {
+            return cb(response.data)
         })
     }
 }

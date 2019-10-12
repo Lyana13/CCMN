@@ -3,7 +3,7 @@ import { Card, Accordion } from "react-bootstrap";
 import cmxAPI from "./cmxAPI";
 import Select from 'react-select';
 import DwellChart from "./DwellChart";
-import Proximity from "./Proximity";
+
 import RepeatVisitors from "./RepeatVisitors";
 import Calendar from 'react-calendar'
 import {Container, Row, Col} from "react-bootstrap";
@@ -99,7 +99,6 @@ class Content extends React.Component  {
 
                 <Col xs={12} sm={6} md={8} lg={9}>
                 <RepeatVisitors range={this.state.selectedRange.value} />
-                <Proximity range={this.state.selectedRange.value} />
                 </Col> 
         </Row> 
         <Row>     

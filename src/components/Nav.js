@@ -80,6 +80,7 @@ export default function ScrollableTabsButtonForce() {
           <Tab component={Link} to="/chart" label="Forecasting" icon={<EqualizerIcon />} {...a11yProps(5)} />
           <Tab component={Link} to="/active" label="active users" icon={<FaceTwoToneIcon />} {...a11yProps(0)} />
           <Tab component={Link} to="/active" label="Data" icon={<EqualizerIcon />} {...a11yProps(11)} />
+          <Tab component={Link} to="/corelation" label="Corelation" icon={<PieChartIcon />} {...a11yProps(11)} />
           <Tab component={Link} to="/repeat_visitors" label="RepeatVisitors" icon={<ImportContactsIcon />} {...a11yProps(6)} />
         </Tabs>
       </AppBar>
