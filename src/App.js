@@ -5,9 +5,6 @@ import Footer from "./components/Footer.js";
 import Content from "./components/Content.js";
 import Chart from "./components/Chart";
 import Nav from "./components/Nav.js";
-import KPI from "./components/KPI.js";
-import Home from "./components/Home.js";
-import Map from "./components/Map.js";
 import RepeatVisitors from "./components/RepeatVisitors.js";
 import Floor from "./components/Floor.js";
 import Active from "./components/Active.js";
@@ -37,34 +34,29 @@ componentWillMount(){
   render() {
     return (
         <Router> 
-          <div>
             <Header />
             <Nav />
             <Switch>
-               <Route path="/" exact component={ Home } />
                 <Route path="/chart" component={ Chart } chartData={this.state.chartData}/>
                 <Route path="/analitics" component={ Analitics } />
-                <Route path="/kpi" component={ KPI } />
                 <Route path="/repeat_visitors" component={ RepeatVisitors } />
-                <Route path="/floor" component={ Floor } />
-                <Route path="/maps" component={ Map } />
+                <Route path="/floor" exact component={ Floor } />
                 <Route path="/active" component={ Active } />
                 <Route path="/content" component={Content} />
             </Switch> 
             <Footer /> 
-          </div> 
         </Router> 
       );
   }
 }
-// const na = {
-//   color: 'red'
-// }
-//   const Home = () => (
-//       <div>
-//         <h1 style={na}>Home Page</h1>
-//       </div>
-//     );
+const na = {
+  color: 'red'
+}
+  const Home = () => (
+      <div>
+        <h1 style={na}>Home Page</h1>
+      </div>
+    );
 
   
 export default App;

@@ -1,13 +1,13 @@
 import React, {Component} from "react";
 import cmxAPI from "./cmxAPI";
-import {Bar, Pie, Line} from 'react-chartjs-2';
+import {Bar, Pie} from 'react-chartjs-2';
 import {Container, Row, Col} from "react-bootstrap";
 
 class Chart extends Component {
     constructor(props){
         super(props);
         this.state = {
-            chartData:[]
+            chartData:[],
         }
     }
 
@@ -57,9 +57,9 @@ class Chart extends Component {
 
     render (){
         return (
-            <Container>
+            <Container >
                 <Row>
-            <Col item  sm={12} md={6} lg={6}>
+            <Col item  sm={12} lg={6}>
             <Bar
                 data = {{
                     labels:['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
@@ -83,7 +83,7 @@ class Chart extends Component {
                     title:{
                         display:this.props.displayTitle,
                         text: 'Forecasting number of visitors for next week',
-                        fontSize: 25
+                        fontSize: 20,
                     },
                     legend:{
                         display:this.props.displayLegend,
@@ -92,72 +92,8 @@ class Chart extends Component {
                 }}
             />
             </Col>
-            <Col item sm={12} lg={6}>
-            <Line
-               data = {{
-                labels:['DAILY', 'FIRST_TIME', 'OCCASIONAL', 'WEEKLY', 'YESTERDAY'],
-                datasets:[
-                    {
-                        label:'Number of visitors',
-                        data: this.state.chartData,
-                        backgroundColor:[
-                            'rgba(102,51,153,1)',
-                            'rgba(102,51,153,1)',
-                            'rgba(102,51,153,1)',
-                            'rgba(102,51,153,1)',
-                            'rgba(102,51,153,1)',
-                            'rgba(102,51,153,1)',
-                            'rgba(102,51,153,1)'
-                        ]
-                    }
-                ]
-            }}
-                options={{ 
-                    title:{
-                        display:this.props.displayTitle,
-                        text: 'Forecasting number of visitors(7 days)',
-                        fontSize: 25
-                    },
-                    legend:{
-                        display:this.props.displayLegend,
-                        position:this.props.legendPosition
-                    }
-                }}
-            />
-            </Col>
-            <Col item sm={12} lg={6}>
-                <Pie
-                data = {{
-                    labels:['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-                    datasets:[
-                        {
-                            label:'Number of visitors',
-                            data: this.state.chartData,
-                            backgroundColor:[
-                                'rgba(102,51,153,1)',
-                                'rgba(102,51,153,1)',
-                                'rgba(102,51,153,1)',
-                                'rgba(102,51,153,1)',
-                                'rgba(102,51,153,1)',
-                                'rgba(102,51,153,1)',
-                                'rgba(102,51,153,1)'
-                            ]
-                        }
-                    ]
-                }}
-                options={{ 
-                    title:{
-                        display:this.props.displayTitle,
-                        text: 'Correlation between visitors and device manufactures',
-                        fontSize: 25
-                    },
-                    legend:{
-                        display:this.props.displayLegend,
-                        position:this.props.legendPosition
-                    }
-                }}
-            />
-            </Col>
+          
+           
             </Row>
             </Container>
         )

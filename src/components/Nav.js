@@ -76,14 +76,11 @@ export default function ScrollableTabsButtonForce() {
           aria-label="scrollable force tabs example"
         >
           <Tab component={Link} to="/floor" label="Floors" icon={<BarChartTwoToneIcon />} {...a11yProps(5)} />
-          <Tab component={Link} to="/content" label="Dwell Time" icon={<RoomSharpIcon />} {...a11yProps(6)} />
-          <Tab component={Link} to="/chart" label="Forecasting" icon={<PieChartIcon />} {...a11yProps(5)} />
+          <Tab component={Link} to="/content" label="Analytics and Presence" icon={<RoomSharpIcon />} {...a11yProps(6)} />
+          <Tab component={Link} to="/chart" label="Forecasting" icon={<EqualizerIcon />} {...a11yProps(5)} />
           <Tab component={Link} to="/active" label="active users" icon={<FaceTwoToneIcon />} {...a11yProps(0)} />
-          <Tab component={Link} to="/home" label="home" icon={<FaceTwoToneIcon />} {...a11yProps(0)} />
-          <Tab label="Analytics and Presence" icon={<EqualizerIcon />} {...a11yProps(3)} />
-          <Tab label="Correlations" icon={<TrendingUpIcon />} {...a11yProps(4)} />
+          <Tab component={Link} to="/active" label="Data" icon={<EqualizerIcon />} {...a11yProps(11)} />
           <Tab component={Link} to="/repeat_visitors" label="RepeatVisitors" icon={<ImportContactsIcon />} {...a11yProps(6)} />
-          <Tab component={Link} to="/kpi" label="KPi" icon={<FaceTwoToneIcon />} {...a11yProps(0)} />
         </Tabs>
       </AppBar>
       <TabPanel  value={value} index={0}>

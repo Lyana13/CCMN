@@ -183,9 +183,8 @@ class DwellChart extends Component {
     render (){
         return (
             <Container>
-             <Grid container spacing={1}>
-             <Grid item xs={8} sm={8}>
-                <h2>Dwell Time</h2>
+             <Grid>
+                <h2 style={{textAlign: "center", margin: 20}}>Dwell Time</h2>
                 <Line ref="chart" data={
                     {
                         labels: this.state.labels,
@@ -299,10 +298,6 @@ class DwellChart extends Component {
                       }
                 } />
                 </Grid>
-                <Grid item xs={8} sm={8}>
-                fllfl
-                </Grid>
-             </Grid>
             </Container>
         )
     }

@@ -14,7 +14,7 @@ class Home extends Comment {
 
     componentDidMount(){
 
-        // cmxAPI.totalVisitorsYesterday(sitesID, data => console.log("topDevicesMacers", data));
+    
     }
 
     render(){

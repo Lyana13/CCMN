@@ -3,6 +3,7 @@ import AWN from 'awesome-notifications';
 import cmxAPI from "./cmxAPI";
 import Select from 'react-select';
 import "awesome-notifications/dist/style.css";
+import {Container, Row, Col} from "react-bootstrap";
 
 const options = [
     { value: '1st_Floor', label: 'First' },
@@ -22,7 +23,6 @@ class Floor extends React.Component {
         }
         this.updateFloorImage = this.updateFloorImage.bind(this);
     }
-
     componentDidMount() {
         this.updateFloorImage(this.state.selectedFloor.value);
         let notifier = new AWN({});
@@ -70,45 +70,41 @@ class Floor extends React.Component {
         const floorName = this.state.selectedFloor.value,
         floorId = this.state.visitsCountMap.get(floorName);
         return(
-          
-                    <div className="containe">
-                    
-                        <div style={{
-                            backgroundImage: "url(" + this.state.image + ")",
-                            backgroundSize: 'cover',
-                            width: 775,
-                            height: 385,
-                            position: 'absolute',
+          <Container>
+              
+                    <div style={{
+                        backgroundImage: "url(" + this.state.image + ")",
+                        backgroundSize: 'cover',
+                        width: 775,
+                        height: 385,
+                        position: 'absolute',
 
-                        }} id="content__map">
-                            {this.state.clients
-                                .filter(client => floorId === client.mapInfo.floorRefId)
-                                .map(client => {
-                                    return <div key={client.macAddress} style={{
-                                        width: 10,
-                                        height: 10,
-                                        borderRadius: 5,
-                                        backgroundColor: 'blue',
-                                        position: 'absolute',
-                                        left: client.mapCoordinate.x / 2 - 5,
-                                        top: client.mapCoordinate.y / 2 - 5
-                                    }}>
-                                    </div>
-                                    }
-                                )
-                            }  
-                        </div>
-                        <div className="side__bar">
-                        <Select 
-                        value={this.state.selectedFloor}
-                        onChange={this.handleFloorChange}
-                        options={options}
-                        />
-                        </div>
-                      
+                    }} id="content__map">
+                        {this.state.clients
+                            .filter(client => floorId === client.mapInfo.floorRefId)
+                            .map(client => {
+                                return <div key={client.macAddress} style={{
+                                    width: 10,
+                                    height: 10,
+                                    borderRadius: 5,
+                                    backgroundColor: 'blue',
+                                    position: 'absolute',
+                                    left: client.mapCoordinate.x / 2 - 5,
+                                    top: client.mapCoordinate.y / 2 - 5
+                                }}>
+                                </div>
+                                }
+                            )
+                        }  
                     </div>
-   
- 
+                    <div className="side__bar">
+                    <Select 
+                    value={this.state.selectedFloor}
+                    onChange={this.handleFloorChange}
+                    options={options}
+                    />
+                    </div> 
+          </Container>
         )   
     }
 }
