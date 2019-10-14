@@ -15,6 +15,7 @@ import EqualizerIcon from '@material-ui/icons/Equalizer';
 import TrendingUpIcon from '@material-ui/icons/TrendingUp';
 import PieChartIcon from '@material-ui/icons/PieChart';
 import ImportContactsIcon from '@material-ui/icons/ImportContacts';
+import ImportantDevicesIcon from '@material-ui/icons/ImportantDevices';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -78,9 +79,9 @@ export default function ScrollableTabsButtonForce() {
           <Tab component={Link} to="/floor" label="Floors" icon={<BarChartTwoToneIcon />} {...a11yProps(5)} />
           <Tab component={Link} to="/content" label="Analytics and Presence" icon={<RoomSharpIcon />} {...a11yProps(6)} />
           <Tab component={Link} to="/chart" label="Forecasting" icon={<EqualizerIcon />} {...a11yProps(5)} />
-          <Tab component={Link} to="/active" label="active users" icon={<FaceTwoToneIcon />} {...a11yProps(0)} />
+          <Tab component={Link} to="/devices" label="Current Devices" icon={<EqualizerIcon />} {...a11yProps(0)} />
           <Tab component={Link} to="/active" label="Data" icon={<EqualizerIcon />} {...a11yProps(11)} />
-          <Tab component={Link} to="/corelation" label="Corelation" icon={<PieChartIcon />} {...a11yProps(11)} />
+          <Tab component={Link} to="/corelation" label="Corelation" icon={<ImportantDevicesIcon />} {...a11yProps(11)} />
           <Tab component={Link} to="/repeat_visitors" label="RepeatVisitors" icon={<ImportContactsIcon />} {...a11yProps(6)} />
         </Tabs>
       </AppBar>

@@ -58,12 +58,25 @@ class RepeatVisitors extends Component {
           else if (days === "Last 3 Days") {
             this.repeatVisitorsThreeDays();
           }
+          else if (days === "Last 7 Days") {
+            this.repeatVisitorsLastweek();
+          }
+          else if (days === "Last 30 Days") {
+            this.repeatVisitors30days()
+          }
+          else if (days === "This Month"){
+            this.repeatVisitorsThisMouth()
+          }
+          else if (days === "Last Month") {
+            this.repeatVisitorsLastMouth()
+          }
     }
     commonRepeatVisitors(data){
         //  console.log("DATARepeat",data);
         let keys = Object.keys(data);
         data = Object.values(data);
-        console.log("DATARepeat",keys);
+        // console.log("DATARepeat",keys);
+        // console.log("DATA", data);
         const daily =  data.map(e => e.DAILY);
         const firstTime = data.map(e => e.FIRST_TIME);
         const occasiona = data.map(e => e.OCCASIONA);
@@ -75,8 +88,33 @@ class RepeatVisitors extends Component {
             OCCASIONA:occasiona,
             WEEKLY:weekly,
             YESTERDAY:yesterday,
-            // labels: keys
+            labels: keys
         });
+    }
+    commonRepeatVisitorsThreeDays(data){
+      // console.log("yce", data);
+      data = Object.values(data);
+      // console.log("values", data);
+      data =  data.map(e => {
+      return Object.values(e);
+      });
+      console.log("values", data);
+      var arrays = data[0].concat(data[1], data[2]);
+      // console.log("values", arrays);
+      const daily =  arrays.map(e => e.DAILY);
+      const firstTime = arrays.map(e => e.FIRST_TIME);
+      const occasiona = arrays.map(e => e.OCCASIONA);
+      const weekly = arrays.map(e => e.WEEKLY);
+      const yesterday = arrays.map(e => e.YESTERDAY);
+      console.log("d", firstTime);
+      this.setState({
+        DAILY:daily, 
+        FIRST_TIME:firstTime,
+        OCCASIONA:occasiona,
+        WEEKLY:weekly,
+        YESTERDAY:yesterday,
+        // labels: keys
+    });
     }
 
     repeatVisitorsToday(){
@@ -93,9 +131,33 @@ class RepeatVisitors extends Component {
     
     repeatVisitorsThreeDays(){
         cmxAPI.repeatVisitorsThreeDays(data => {
-            this.commonRepeatVisitors(data)
+            this.commonRepeatVisitorsThreeDays(data)
         });
     }
+    repeatVisitorsLastweek(){
+      cmxAPI.repeatVisitorsLastweek(data => {
+        console.log("7days", data);
+          this.commonRepeatVisitors(data)
+      });
+  }
+  repeatVisitors30days(){
+    cmxAPI.repeatVisitors30days(data => {
+      console.log("30days", data);
+        this.commonRepeatVisitors(data)
+    });
+  }
+  repeatVisitorsThisMouth(){
+    cmxAPI.repeatVisitorsThisMouth(data => {
+      console.log("repeatVisitorsThisMouth", data);
+        this.commonRepeatVisitors(data)
+    });
+  }
+  repeatVisitorsLastMouth(){
+    cmxAPI.repeatVisitorsLastMouth(data => {
+      console.log("repeatVisitorsLastMouth", data);
+        this.commonRepeatVisitors(data)
+    });
+  }
     
     render() {
         return(

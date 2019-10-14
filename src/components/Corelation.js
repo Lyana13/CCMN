@@ -134,88 +134,95 @@ class Corelation extends Component {
         return (
             <Container>
                 <Row>
-                <Col>
-                    <p>Visitor count in peak hour: {this.state.peakHourCount}</p>
-                    <p>Peak Day: {this.state.peakDayCount}visitors on {this.state.peakDate}</p>
-                    <p>totalConnectedCount: {this.state.totalConnectedCount}totalConnectedCount {this.state.totalPasserbyCount}</p>
+                    {/* <Col>
+                        <p>Visitor count in peak hour: {this.state.peakHourCount}</p>
+                        <p>Peak Day: {this.state.peakDayCount}visitors on {this.state.peakDate}</p>
+                        <p>totalConnectedCount: {this.state.totalConnectedCount}totalConnectedCount {this.state.totalPasserbyCount}</p>
+                    </Col> */}
+                    <Col item sm={12} lg={6}>
+                        <Pie data={{
+                            labels: [
+                            'Visitors',
+                            'Passerby',
+                            "Connected",
+                            'Probing',
+                            'Visitors',
+                            'Passerby',
+                            "Connected"
+                            ],
+                            datasets: [{
+                                data: this.state.chartData,
+                            //   data: [this.state.peakHourCount,this.state.totalPasserbyCount, this.state.totalConnectedCount, this.state.peakDate],
+                            backgroundColor: [
+                                '#92a8d1;',
+                            '#FF6384',
+                            '#36A2EB',
+                            '#FFCE56',
+                            '#FTCO51',
+                            '#92a8d1;',
+                            ],
+                            hoverBackgroundColor: [
+                            '#FF6384',
+                            '#36A2EB',
+                            '#FFCE56',
+                            '#74992e;',
+                            '#92a8d1;',
+                            ]
+                            }]
+                        }}
+                        height={550} width={200} 
+                        options={{
+                            maintainAspectRatio: false,
+                            responsive: false,
+                            title:{
+                                text: 'Forecasting number of visitors for next week',
+                                fontSize: 20,
+                            },
+                            legend: {
+                            position: 'left',
+                            labels: {
+                                boxWidth: 10
+                            }
+                            }
+                        }}
+                        />
                     </Col>
                     <Col item sm={12} lg={6}>
-                    <Pie data={{
-                        labels: [
-                        'Visitors',
-                        'Passerby',
-                        "Connected",
-                        'Probing',
-                        'Visitors',
-                        'Passerby',
-                        "Connected"
-                        ],
-                        datasets: [{
-                            data: this.state.chartData,
-                        //   data: [this.state.peakHourCount,this.state.totalPasserbyCount, this.state.totalConnectedCount, this.state.peakDate],
-                        backgroundColor: [
-                        '#FF6384',
-                        '#36A2EB',
-                        '#FFCE56',
-                        '#FTCO51'
-                        ],
-                        hoverBackgroundColor: [
-                        '#FF6384',
-                        '#36A2EB',
-                        '#FFCE56',
-                        '#FFCE56'
-                        ]
-                        }]
-                    }}
-                    height={550} width={200} 
-                    options={{
-                        maintainAspectRatio: false,
-                        responsive: false,
-                        title:{
-                            text: 'Forecasting number of visitors for next week',
-                            fontSize: 20,
-                        },
-                        legend: {
-                          position: 'left',
-                          labels: {
-                            boxWidth: 10
-                          }
-                        }
-                      }}/>
-
-                <Pie
-                data = {{
-                    labels:['Passerby', 'Visitors'],
-                    datasets:[
-                        {
-                            label:'Number of visitors',
-                            data: this.state.chartDailyVisitors,
-                            backgroundColor:[
-                                'rgba(102,51,153,1)',
-                                'rgba(12,1,103,1)',
-                                'rgba(102,51,153,1)',
-                                'rgba(12,1,103,1)',
-                                'rgba(102,51,153,1)',
-                                'rgba(12,1,103,1)',
+                    <Pie
+                        data = {{
+                            labels:['Passerby', 'Visitors'],
+                            datasets:[
+                                {
+                                    label:'Number of visitors',
+                                    data: this.state.chartDailyVisitors,
+                                    backgroundColor:[
+                                        'rgba(102,51,153,1)',
+                                        'rgba(249, 61, 47, 1)',
+                                        'rgba(12,1,103,1)',
+                                        'rgba(255, 138, 103, 1)',
+                                        'rgba(12,1,103,1)',
+                                        'rgba(0, 157, 255, 1)',
+                                        'rgba(0, 157, 58, 1)',
+                                        'rgba(214, 254, 166, 1)'
+                                    ]
+                                }
                             ]
-                        }
-                    ]
-                }}
-                options={{ 
-                    title:{
-                        display:this.props.displayTitle,
-                        text: 'Correlation between visitors and device manufactures',
-                        fontSize: 20,
-                    },
-                    legend:{
-                        display:this.props.displayLegend,
-                        position:this.props.legendPosition
-                    }
-                }}
-            />
-            </Col>
-                    </Row>
-                    </Container>
+                        }}
+                        options={{ 
+                            title:{
+                                display:this.props.displayTitle,
+                                text: 'Correlation between visitors and device manufactures',
+                                fontSize: 20,
+                            },
+                            legend:{
+                                display:this.props.displayLegend,
+                                position:this.props.legendPosition
+                            }
+                        }}
+                    />
+                    </Col>
+                </Row>
+            </Container>
         )
     }
 }

@@ -56,43 +56,41 @@ class Chart extends Component {
     render (){
         return (
             <Container >
-                <Row>
-            <Col item  sm={12} lg={6}>
-            <Bar
-                data = {{
-                    labels:['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-                    datasets:[
-                        {
-                            label:'Number of visitors',
-                            data: this.state.chartData,
-                            backgroundColor:[
-                                'rgba(102,51,153,1)',
-                                'rgba(102,51,153,1)',
-                                'rgba(102,51,153,1)',
-                                'rgba(102,51,153,1)',
-                                'rgba(102,51,153,1)',
-                                'rgba(102,51,153,1)',
-                                'rgba(102,51,153,1)'
+                <Row >
+                    <Col item  sm={12} lg={8}>
+                    <Bar
+                        data = {{
+                            labels:['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+                            datasets:[
+                                {
+                                    label:'Number of visitors',
+                                    data: this.state.chartData,
+                                    backgroundColor:[
+                                        'rgba(102,51,153,1)',
+                                        'rgba(102,51,153,1)',
+                                        'rgba(102,51,153,1)',
+                                        'rgba(102,51,153,1)',
+                                        'rgba(102,51,153,1)',
+                                        'rgba(102,51,153,1)',
+                                        'rgba(102,51,153,1)'
+                                    ]
+                                }
                             ]
-                        }
-                    ]
-                }}
-                options={{ 
-                    title:{
-                        display:this.props.displayTitle,
-                        text: 'Forecasting number of visitors for next week',
-                        fontSize: 20,
-                    },
-                    legend:{
-                        display:this.props.displayLegend,
-                        position:this.props.legendPosition
-                    }
-                }}
-            />
-            </Col>
-          
-           
-            </Row>
+                        }}
+                        options={{ 
+                            title:{
+                                display:this.props.displayTitle,
+                                text: 'Forecasting number of visitors for next week',
+                                fontSize: 20,
+                            },
+                            legend:{
+                                display:this.props.displayLegend,
+                                position:this.props.legendPosition
+                            }
+                        }}
+                    />
+                    </Col>
+                </Row>
             </Container>
         )
     }

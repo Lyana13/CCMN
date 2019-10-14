@@ -7,7 +7,7 @@ import ImportantDevicesIcon from '@material-ui/icons/ImportantDevices';
 import SpeedIcon from '@material-ui/icons/Speed';
 import TimelapseIcon from '@material-ui/icons/Timelapse';
 
-class Active extends Component  {
+class CurrentDevices extends Component  {
   
     constructor(props){
         super(props);
@@ -158,4 +158,4 @@ class Active extends Component  {
     }
 }
 
-export default Active;
+export default CurrentDevices;

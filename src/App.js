@@ -8,7 +8,7 @@ import Nav from "./components/Nav.js";
 import Corelation from "./components/Corelation.js";
 import RepeatVisitors from "./components/RepeatVisitors.js";
 import Floor from "./components/Floor.js";
-import Active from "./components/Active.js";
+import CurrentDevices from "./components/CurrentDevices.js";
 import Analitics from "./components/Analitics";
 
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
@@ -43,7 +43,7 @@ componentWillMount(){
                 <Route path="/repeat_visitors" component={ RepeatVisitors } />
                 <Route path="/floor" exact component={ Floor } />
                 <Route path="/corelation" component={ Corelation } />
-                <Route path="/active" component={ Active } />
+                <Route path="/devices" component={ CurrentDevices } />
                 <Route path="/content" component={Content} />
             </Switch> 
             <Footer /> 

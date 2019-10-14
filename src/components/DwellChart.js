@@ -4,8 +4,6 @@ import {Line} from 'react-chartjs-2';
 import {Container} from "react-bootstrap";
 import Grid from '@material-ui/core/Grid';
 
-
-
 class DwellChart extends Component {
     constructor(props){
         super(props);
@@ -95,7 +93,7 @@ class DwellChart extends Component {
     //     // console.log("lastmonthlastmonth", kpi);
     //     this.setState({chartData: [today.data, three.data,yesterday.data, lastweek.data, lastmonth.data]})
     // }
-
+  
     commonDwellHourly(data){
       //  console.log("DATA",data);
       let keys = Object.keys(data);
@@ -116,10 +114,29 @@ class DwellChart extends Component {
       });
     }
     getLabelForThreeDays(data){
-      // let value = Object.values(data);
-      // console.log("ddddddddd", Object.keys(value));
-      // console.log("ddddddddd", Object.keys(data));
-    }
+        console.log("yce", data);
+        data = Object.values(data);
+        console.log("values", data);
+        data =  data.map(e => {
+        return Object.values(e);
+        });
+        console.log("values", data);
+        var arrays = data[0].concat(data[1], data[2]);
+        console.log("values", arrays);
+        const eightPlusHours =  arrays.map(e => e.EIGHT_PLUS_HOURS);
+        const fiveToEightHours = arrays.map(e => e.FIVE_TO_EIGHT_HOURS);
+        const fiveToThirtyMinutes = arrays.map(e => e.FIVE_TO_THIRTY_MINUTES);
+        const oneToFiveHours = arrays.map(e => e.ONE_TO_FIVE_HOURS);
+        const thirtyToSixtyMinutes = arrays.map(e => e.THIRTY_TO_SIXTY_MINUTES);
+        this.setState({
+          eightPlusHours:eightPlusHours, 
+        fiveToEightHours:fiveToEightHours,
+        fiveToThirtyMinutes: fiveToThirtyMinutes,
+        oneToFiveHours: oneToFiveHours,
+        thirtyToSixtyMinutes: thirtyToSixtyMinutes,
+        // labels: keys
+      });
+      }
     dwellHourlyToday(){
         cmxAPI.dwellHourlyToday(data => {
           this.commonDwellHourly(data)
@@ -134,12 +151,14 @@ class DwellChart extends Component {
 
     dwellHourlyTime3days(){
       cmxAPI.dwellHourlyThreeDays(data => {
+       
          this.getLabelForThreeDays(data)
       });
     }
     dwellDailyTime7days(){
       cmxAPI.dwellDailyLastweek(data => {
-        // console.log("n",data);
+        console.log("n",data);
+        this.commonDwellHourly(data)
       });
     }
     dweellDailyTime30days(){
@@ -161,7 +180,7 @@ class DwellChart extends Component {
       start = this.dateToString(start);
       end = this.dateToString(end);
       cmxAPI.dwellDaily(start, end, data => {
-        this.commonDwellHourly(data);
+        this.commonDwellHourlyLastMouth(startDate, endDate, data);
       });
     }
     dwellDailyLastMonth(){

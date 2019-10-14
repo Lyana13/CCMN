@@ -187,27 +187,54 @@ totalVisitorsToday(cb){
     }
     /* number of repeat visitors */
     repeatVisitorsToday(cb){
-        axios.get(this.presenceUrl + "/api/presence/v1/repeatvisitors/hourly/today?siteId=1513804707441&startDate=", {
+        axios.get(this.presenceUrl + "/api/presence/v1/repeatvisitors/hourly/today?siteId=1513804707441", {
             auth: this.presenceAuth
         }).then(response => {
             return cb(response.data)
         })
     }
     repeatVisitorsYesterday(cb){
-        axios.get(this.presenceUrl + "/api/presence/v1/repeatvisitors/hourly/yesterday?siteId=1513804707441&startDate=", {
+        axios.get(this.presenceUrl + "/api/presence/v1/repeatvisitors/hourly/yesterday?siteId=1513804707441", {
             auth: this.presenceAuth
         }).then(response => {
             return cb(response.data)
         })
     }
     repeatVisitorsThreeDays(cb){
-        axios.get(this.presenceUrl + "/api/presence/v1/repeatvisitors/hourly/3days?siteId=1513804707441&startDate=", {
+        axios.get(this.presenceUrl + "/api/presence/v1/repeatvisitors/hourly/3days?siteId=1513804707441", {
             auth: this.presenceAuth
         }).then(response => {
             return cb(response.data)
         })
     }
-
+    repeatVisitorsLastweek(cb){
+        axios.get(this.presenceUrl + "/api/presence/v1/repeatvisitors/daily/lastweek?siteId=1513804707441", {
+            auth: this.presenceAuth
+        }).then(response => {
+            return cb(response.data)
+        })
+    }
+    repeatVisitors30days(cb){
+        axios.get(this.presenceUrl + "/api/presence/v1/repeatvisitors/daily/lastmonth?siteId=1513804707441", {
+            auth: this.presenceAuth
+        }).then(response => {
+            return cb(response.data)
+        })
+    }
+    repeatVisitorsThisMouth(startDate, endDate, cb){
+        axios.get(this.presenceUrl + "/api/presence/v1/repeatvisitors/daily?siteId=1513804707441&startDate=" + startDate +"&endDate=" + endDate, {
+            auth: this.presenceAuth
+        }).then(response => {
+            return cb(response.data)
+        })
+    }
+    repeatVisitorsLastMouth(startDate, endDate, cb){
+        axios.get(this.presenceUrl + "/api/presence/v1/repeatvisitors/count?siteId=1513804707441&startDate=" + startDate +"&endDate=" + endDate, {
+            auth: this.presenceAuth
+        }).then(response => {
+            return cb(response.data)
+        })
+    }
     /* proxi*/
     proximitySummaryToday(cb){
         axios.get(this.presenceUrl + "/api/presence/v1/kpisummary//today?siteId=1513804707441", {
