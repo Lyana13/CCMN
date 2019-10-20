@@ -5,11 +5,19 @@ import Select from 'react-select';
 import "awesome-notifications/dist/style.css";
 import {Container, Row, Col} from "react-bootstrap";
 
+
+
 const options = [
-    { value: '1st_Floor', label: 'First' },
-    { value: '2nd_Floor', label: 'Second' },
-    { value: '3rd_Floor', label: 'Third' },
-  ];
+    { value: "735495909441273878", label: 'First' },
+    { value: "735495909441273979", label: 'Second' },
+    { value: "735495909441273980", label: 'Third' },
+];
+
+const floorsNames = {
+    "735495909441273878": "1st_Floor",
+    "735495909441273979": "2nd_Floor",
+    "735495909441273980": "3rd_Floor"
+}
 
 class Floor extends React.Component {
     constructor(props){
@@ -17,10 +25,12 @@ class Floor extends React.Component {
 
         this.state = {
             image: "",
-            selectedFloor: { value: '1st_Floor', label: 'First' },
+            selectedFloor: options[0],
             clients: [],
-            visitsCountMap: new Map()
+            searchedMacAddress: "",
+
         }
+        this.changeMacAddress = this.changeMacAddress.bind(this);
         this.updateFloorImage = this.updateFloorImage.bind(this);
     }
     componentDidMount() {
@@ -38,17 +48,18 @@ class Floor extends React.Component {
                 notifier.info("Hi, @xlogin or mac: " + macAddr + " now is on the " + this.state.selectedFloor.label.toLowerCase() + " floor", {});
             });
         }, 1000);
-        cmxAPI.getFloorsInfo(floorList => {
-            let visitsCountMap = new Map();
-                floorList.forEach(floor => {
-                    visitsCountMap.set(floor.name, floor.aesUidString);
-                })
-                this.setState({visitsCountMap: visitsCountMap});
-        });
+        // cmxAPI.getFloorsInfo(floorList => {
+        //     console.log("fL", floorList);
+        //     let visitsCountMap = new Map();
+        //         floorList.forEach(floor => {
+        //             visitsCountMap.set(floor.name, floor.aesUidString);
+        //         })
+        //         this.setState({visitsCountMap: visitsCountMap});
+        // });
     }
 
-    updateFloorImage(Floor) {
-        cmxAPI.getFloorImage(Floor, image => this.setState({ image }));
+    updateFloorImage(floorId) {
+        cmxAPI.getFloorImage(floorsNames[floorId], image => this.setState({ image }));
     }
 
     handleFloorChange = selectedFloor => {
@@ -65,13 +76,36 @@ class Floor extends React.Component {
         updatedClients = this.macAdressesFromClients(updatedClients)
         return updatedClients.filter(e => !oldClients.includes(e));
     }
+    changeMacAddress(e){
+        const macAddress = e.target.value;
+        // console.log("e", e.target.value);
+        this.setState({searchedMacAddress: macAddress});
+        var regex = /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/;
+        // console.log(macAddress, regex.test(macAddress));
+        console.log("clientd",this.state.clients);
+        // this.state.clients.forEach(e => console.log("cli", e))
+        if(regex.test(macAddress)){
+            e.target.classList.remove("err");
+            e.target.classList.add("valid");
+            const client = this.state.clients.find(e => e.macAddress == macAddress);
+            if (client){
+                const option = options.find(e => e.value == client.mapInfo.floorRefId);
+                this.setState({ selectedFloor: option });
+                this.updateFloorImage(option.value);
+            }
+        }
+        else{
+            e.target.classList.remove("valid");
+            e.target.classList.add("err");
+        }
+    }
+    // 24:6f:28:db:20:d8
 
     render(){
-        const floorName = this.state.selectedFloor.value,
-        floorId = this.state.visitsCountMap.get(floorName);
+        const floorId = this.state.selectedFloor.value
         return(
           <Container>
-              
+                <p className="header__item">Search <input value={this.state.searchedMacAddress} onChange={this.changeMacAddress} id="header__item_search"/></p>
                     <div style={{
                         backgroundImage: "url(" + this.state.image + ")",
                         backgroundSize: 'cover',
@@ -84,10 +118,10 @@ class Floor extends React.Component {
                             .filter(client => floorId === client.mapInfo.floorRefId)
                             .map(client => {
                                 return <div key={client.macAddress} style={{
-                                    width: 10,
-                                    height: 10,
-                                    borderRadius: 5,
-                                    backgroundColor: 'blue',
+                                    width: client.macAddress === this.state.searchedMacAddress ? 20 : 10,
+                                    height: client.macAddress === this.state.searchedMacAddress ? 20 : 10,
+                                    borderRadius: client.macAddress === this.state.searchedMacAddress ? 10 : 5,
+                                    backgroundColor: client.macAddress === this.state.searchedMacAddress ? "red" : 'blue',
                                     position: 'absolute',
                                     left: client.mapCoordinate.x / 2 - 5,
                                     top: client.mapCoordinate.y / 2 - 5

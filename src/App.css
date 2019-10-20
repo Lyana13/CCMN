@@ -94,6 +94,12 @@ li.colorTwoStep{
         margin-left: 26%;
       }
     }
+    .err{
+      color: red;
+    }
+    .valid {
+      color: green;
+    }
 
 /*footer*/
 

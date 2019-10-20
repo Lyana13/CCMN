@@ -41,13 +41,13 @@ class cmxAPI {
         })
     }
 
-    getFloorsInfo(cb) {
-        axios.get(this.cmxUrl + "/api/config/v1/maps/info/System Campus/UNIT.Factory/", {
-            auth: this.cmxAuth
-        }).then(response => {
-            return cb(response.data.floorList)
-        })
-    }
+    // getFloorsInfo(cb) {
+    //     axios.get(this.cmxUrl + "/api/config/v1/maps/info/System Campus/UNIT.Factory/", {
+    //         auth: this.cmxAuth
+    //     }).then(response => {
+    //         return cb(response.data.floorList)
+    //     })
+    // }
 
     getActiveClients(cb) {
         axios.get(this.cmxUrl + "/api/location/v2/clients/active", {

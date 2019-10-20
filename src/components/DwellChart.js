@@ -137,6 +137,7 @@ class DwellChart extends Component {
         // labels: keys
       });
       }
+    
     dwellHourlyToday(){
         cmxAPI.dwellHourlyToday(data => {
           this.commonDwellHourly(data)
@@ -180,7 +181,7 @@ class DwellChart extends Component {
       start = this.dateToString(start);
       end = this.dateToString(end);
       cmxAPI.dwellDaily(start, end, data => {
-        this.commonDwellHourlyLastMouth(startDate, endDate, data);
+        // this.commonDwellHourlyLastMouth(startDate, endDate, data);
       });
     }
     dwellDailyLastMonth(){
