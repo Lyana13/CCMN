@@ -3,10 +3,11 @@ import { Card, Accordion } from "react-bootstrap";
 import cmxAPI from "./cmxAPI";
 import Select from 'react-select';
 import DwellChart from "./DwellChart";
-
+import chartLib from "./chartLib";
 import RepeatVisitors from "./RepeatVisitors";
 import Calendar from 'react-calendar'
 import {Container, Row, Col} from "react-bootstrap";
+
 
 
   const optionsRange = [
@@ -26,6 +27,7 @@ class Content extends React.Component  {
         super(props);
 
         this.state = {
+            dates: [new Date(), new Date()],
             connected: "",
             all: "",
             detected: "",
@@ -34,17 +36,15 @@ class Content extends React.Component  {
             alalitics: "",
             forecasting: "",
             sitesID: "",
-            selectedRange: { value: 'Today', label: 'Today' },
-            displayCalendar: "none"
+            selectedRange: optionsRange[0],
+            displayCalendar: "none",
+            chartsRange: optionsRange[0].value
         }
         this.updateTotalConnectedCount = this.updateTotalConnectedCount.bind(this);
     }
 
     async componentDidMount() {
         this.updateTotalConnectedCount();
-       setInterval(async () => {
-        this.updateTotalConnectedCount();
-       }, 1000);
         let sitesID = await cmxAPI.getSitesIP();
         this.setState( {sitesID: sitesID} );
         
@@ -59,19 +59,33 @@ class Content extends React.Component  {
     }
 
     handleRangeChange = selectedRange => {
+        let chartRange;
         let displayCalendar = "none";
-        if(selectedRange.value === "Custom Date")
+        if(selectedRange.value == "Custom Date")
             displayCalendar = "block";
+        else
+            chartRange = selectedRange.value
         // this.updateRangeDays(selectedRange.value);
-        this.setState({ selectedRange, displayCalendar});
+        this.setState({ selectedRange, displayCalendar, chartsRange: chartRange});
+    }
+    applyRange(e){
+        var re = chartLib.dateToString(e);
+        console.log("e",re);
+        var s = e.toLocaleDateString();
+        console.log("s",s);
     }
     
+    onCalendarChange = dates => {
+        console.log("dates", dates);
+        this.setState({ dates })
+    }
+
     render(){
         return (   
             <Container>
             <Row>
                 <Col xs={12} sm={6} md={8} lg={9}>
-                <DwellChart range={this.state.selectedRange.value} />
+                <DwellChart range={this.state.chartsRange} />
                 </Col>
                 <Col xs={12} sm={6} md={4} lg={3}>   
                 <ul className="list-group content-wrap-text">
@@ -87,46 +101,28 @@ class Content extends React.Component  {
                                 </Card.Body>
                             </Accordion.Collapse>
                         </Card>
-                    </Accordion>
-                    
+                    </Accordion>         
                 </ul>
                 <Select 
                     value={this.state.selectedRange}
                     onChange={this.handleRangeChange}
                     options={optionsRange}
                 />
-            </Col>
-
-                <Col xs={12} sm={6} md={8} lg={9}>
-                <RepeatVisitors range={this.state.selectedRange.value} />
-                </Col> 
-        </Row> 
-        <Row>     
-        </Row>
-        
-        <Row>
-        <Col md={2} lg={2}>
-            <div style={{boxShadow: "5px 5px 25px", width: "350px", display: this.state.displayCalendar }}>
+                <div style={{boxShadow: "5px 5px 25px", width: "350px", display: this.state.displayCalendar }}>
                 <div onClick={this.reset}>
                     <Calendar 
-                    onChange={this.onChange}
-                    selectRange={true}
-                    value={this.state.date}
+                        onChange={this.onCalendarChange}
+                        selectRange={true}
+                        value={this.state.dates}
                     />
                 </div>
-                {/* <p>Date choose: {this.state.date.toLocaleDateString()}</p> */}
-                <button onClick={this.validation}>Valid</button>
-                {this.state.showDate ? (
-                    <div>
-                        <p>Yes: {this.state.date[0].toLocaleDateString()}</p>
-                        <p>No: {this.state.date[1].toLocaleDateString()}</p>
-                    </div>
-                ) : null}
-                 {/* <DwellChart calendar={this.state.date} /> */}
-            </div>
+                <button onClick={this.applyRange}>Apply</button>
+            </div>  
             </Col>
-        </Row>
-    
+                <Col xs={12} sm={6} md={8} lg={9}>
+                <RepeatVisitors range={this.state.chartsRange} />
+                </Col> 
+        </Row> 
     </Container>
         )
     }

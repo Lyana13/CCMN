@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import cmxAPI from "./cmxAPI";
+import chartLib from "./chartLib";
 import {Line} from 'react-chartjs-2';
 import {Container} from "react-bootstrap";
 import Grid from '@material-ui/core/Grid';
@@ -17,6 +18,7 @@ class DwellChart extends Component {
             oneToFiveHours: [],
             thirtyToSixtyMinutes: []
         }
+      this.setChartData = this.setChartData.bind(this)
     }
     
     onChange = date => {
@@ -38,7 +40,7 @@ class DwellChart extends Component {
   }
     componentDidMount(){
         // this.props.range
-        this.updateRangeDays("This Month");
+        this.updateRangeDays(this.props.range);
         // console.log("bddddd",this.props.range);
     }
   
@@ -93,110 +95,71 @@ class DwellChart extends Component {
     //     // console.log("lastmonthlastmonth", kpi);
     //     this.setState({chartData: [today.data, three.data,yesterday.data, lastweek.data, lastmonth.data]})
     // }
-  
-    commonDwellHourly(data){
-      //  console.log("DATA",data);
-      let keys = Object.keys(data);
-      data = Object.values(data);
-      // console.log("KEYS",keys);
+
+
+    setChartData(data, labels){
       const eightPlusHours =  data.map(e => e.EIGHT_PLUS_HOURS);
       const fiveToEightHours = data.map(e => e.FIVE_TO_EIGHT_HOURS);
       const fiveToThirtyMinutes = data.map(e => e.FIVE_TO_THIRTY_MINUTES);
       const oneToFiveHours = data.map(e => e.ONE_TO_FIVE_HOURS);
       const thirtyToSixtyMinutes = data.map(e => e.THIRTY_TO_SIXTY_MINUTES);
       this.setState({
-        eightPlusHours:eightPlusHours, 
-        fiveToEightHours:fiveToEightHours,
-        fiveToThirtyMinutes: fiveToThirtyMinutes,
-        oneToFiveHours: oneToFiveHours,
-        thirtyToSixtyMinutes: thirtyToSixtyMinutes,
-        labels: keys
-      });
-    }
-    getLabelForThreeDays(data){
-        console.log("yce", data);
-        data = Object.values(data);
-        console.log("values", data);
-        data =  data.map(e => {
-        return Object.values(e);
+          eightPlusHours, 
+          fiveToEightHours,
+          fiveToThirtyMinutes,
+          oneToFiveHours,
+          thirtyToSixtyMinutes,
+          labels
         });
-        console.log("values", data);
-        var arrays = data[0].concat(data[1], data[2]);
-        console.log("values", arrays);
-        const eightPlusHours =  arrays.map(e => e.EIGHT_PLUS_HOURS);
-        const fiveToEightHours = arrays.map(e => e.FIVE_TO_EIGHT_HOURS);
-        const fiveToThirtyMinutes = arrays.map(e => e.FIVE_TO_THIRTY_MINUTES);
-        const oneToFiveHours = arrays.map(e => e.ONE_TO_FIVE_HOURS);
-        const thirtyToSixtyMinutes = arrays.map(e => e.THIRTY_TO_SIXTY_MINUTES);
-        this.setState({
-          eightPlusHours:eightPlusHours, 
-        fiveToEightHours:fiveToEightHours,
-        fiveToThirtyMinutes: fiveToThirtyMinutes,
-        oneToFiveHours: oneToFiveHours,
-        thirtyToSixtyMinutes: thirtyToSixtyMinutes,
-        // labels: keys
-      });
-      }
+    }
     
     dwellHourlyToday(){
-        cmxAPI.dwellHourlyToday(data => {
-          this.commonDwellHourly(data)
-          // const FIVE_TO_THIRTY_MINUTES =  console.log("pref2", Object.values(data).map(e => e.FIVE_TO_THIRTY_MINUTES));
-        });
+      cmxAPI.dwellHourlyToday(data => {
+        chartLib.commonHourly(data, this.setChartData)
+        // const FIVE_TO_THIRTY_MINUTES =  console.log("pref2", Object.values(data).map(e => e.FIVE_TO_THIRTY_MINUTES));
+      });
     }
     dwellHourlyYesterday(){
       cmxAPI.dwellHourlyYesterday(data => {
-        this.commonDwellHourly(data)
+        chartLib.commonHourly(data, this.setChartData)
       });
     }
 
     dwellHourlyTime3days(){
       cmxAPI.dwellHourlyThreeDays(data => {
-       
-         this.getLabelForThreeDays(data)
+         chartLib.commonThreeDays(data, this.setChartData)
       });
     }
+
     dwellDailyTime7days(){
       cmxAPI.dwellDailyLastweek(data => {
         console.log("n",data);
-        this.commonDwellHourly(data)
+        chartLib.commonHourly(data, this.setChartData)
       });
     }
     dweellDailyTime30days(){
       cmxAPI.dwellDaily30Days( data => {
-        this.commonDwellHourly(data)
+        chartLib.commonHourly(data, this.setChartData)
       });
     }
 
-  dateToString(date){
-    let day = date.getDate(),
-        month = date.getMonth() + 1,
-        year = date.getFullYear();
-    return year + "-" + month + "-" + day;
-}
     dwellDailyThisMonth() {
-      let start = new Date();
-      let end = new Date();
-      start = new Date(start.getFullYear(),start.getMonth(), 1);
-      start = this.dateToString(start);
-      end = this.dateToString(end);
-      cmxAPI.dwellDaily(start, end, data => {
-        // this.commonDwellHourlyLastMouth(startDate, endDate, data);
+      const dates = chartLib.getThisMounthDates();
+      cmxAPI.dwellDaily(dates[0], dates[1], data => {
+        chartLib.commonHourly(data, this.setChartData);
       });
     }
     dwellDailyLastMonth(){
-      let start = new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1);
-      let end = new Date(new Date().getFullYear(), new Date().getMonth(), 0);
-      // console.log("start-end", start, end);
-      // cmxAPI.dwellDaily(start, end, data => {
-        cmxAPI.dwellDaily(start, end, data => {
-          this.commonDwellHourly(data);
+      const dates = chartLib.getLastMonthDates();
+        cmxAPI.dwellDaily(dates[0], dates[1], data => {
+          chartLib.commonHourly(data, this.setChartData);
       });
     }
     dwellLastCustom(){
-      // cmxAPI.dwellDaily(start, end, data => {
-      //   this.commonDwellHourly(data);
-      // })
+      const dates = chartLib.getLastMonthDates();
+      cmxAPI.dwellDaily(dates[0], dates[1], data => {
+        this.commonDwellHourly(data);
+      })
     }
 
     render (){

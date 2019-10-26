@@ -28,7 +28,7 @@ class Floor extends React.Component {
             selectedFloor: options[0],
             clients: [],
             searchedMacAddress: "",
-
+            timerId: ""
         }
         this.changeMacAddress = this.changeMacAddress.bind(this);
         this.updateFloorImage = this.updateFloorImage.bind(this);
@@ -36,7 +36,8 @@ class Floor extends React.Component {
     componentDidMount() {
         this.updateFloorImage(this.state.selectedFloor.value);
         let notifier = new AWN({});
-        setInterval(async () => {
+
+        let timerId = setInterval(async () => {
             let oldClients = this.state.clients,
                 newClients = await cmxAPI.getAllClients();
             this.setState({clients: newClients});
@@ -48,6 +49,7 @@ class Floor extends React.Component {
                 notifier.info("Hi, @xlogin or mac: " + macAddr + " now is on the " + this.state.selectedFloor.label.toLowerCase() + " floor", {});
             });
         }, 1000);
+        this.setState({timerId});
         // cmxAPI.getFloorsInfo(floorList => {
         //     console.log("fL", floorList);
         //     let visitsCountMap = new Map();
@@ -56,6 +58,10 @@ class Floor extends React.Component {
         //         })
         //         this.setState({visitsCountMap: visitsCountMap});
         // });
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.state.timerId);
     }
 
     updateFloorImage(floorId) {

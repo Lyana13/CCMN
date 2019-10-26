@@ -63,12 +63,14 @@ export default function ScrollableTabsButtonForce() {
     setValue(newValue);
   };
 
+  const currentTab = window.location.pathname.split("/")[1];
+
   return (
       <Container>
     <div className={classes.root}>
       <AppBar position="static" color="default">
         <Tabs
-          value={value}
+          value={currentTab}
           onChange={handleChange}
           variant="scrollable"
           scrollButtons="on"
@@ -76,35 +78,14 @@ export default function ScrollableTabsButtonForce() {
           textColor="primary"
           aria-label="scrollable force tabs example"
         >
-          <Tab component={Link} to="/floor" label="Floors" icon={<BarChartTwoToneIcon />} {...a11yProps(5)} />
-          <Tab component={Link} to="/content" label="Analytics and Presence" icon={<RoomSharpIcon />} {...a11yProps(6)} />
-          <Tab component={Link} to="/chart" label="Forecasting" icon={<EqualizerIcon />} {...a11yProps(5)} />
-          <Tab component={Link} to="/devices" label="Current Devices" icon={<EqualizerIcon />} {...a11yProps(0)} />
-          <Tab component={Link} to="/active" label="Data" icon={<EqualizerIcon />} {...a11yProps(11)} />
-          <Tab component={Link} to="/corelation" label="Corelation" icon={<ImportantDevicesIcon />} {...a11yProps(11)} />
-          <Tab component={Link} to="/repeat_visitors" label="RepeatVisitors" icon={<ImportContactsIcon />} {...a11yProps(6)} />
+          <Tab value="floor" component={Link} to="/floor" label="Floors" icon={<BarChartTwoToneIcon />} {...a11yProps(5)} />
+          <Tab value="content" component={Link} to="/content" label="Analytics and Presence" icon={<RoomSharpIcon />} {...a11yProps(6)} />
+          <Tab value="chart" component={Link} to="/chart" label="Forecasting" icon={<EqualizerIcon />} {...a11yProps(5)} />
+          <Tab value="devices" component={Link} to="/devices" label="Current Devices" icon={<EqualizerIcon />} {...a11yProps(0)} />
+          <Tab value="active" component={Link} to="/active" label="Data" icon={<EqualizerIcon />} {...a11yProps(11)} />
+          <Tab value="corelation" component={Link} to="/corelation" label="Corelation" icon={<ImportantDevicesIcon />} {...a11yProps(11)} />
         </Tabs>
       </AppBar>
-      <TabPanel  value={value} index={0}>
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-       
-      </TabPanel>
-      <TabPanel value={value} index={3}>
-       
-      </TabPanel>
-      <TabPanel value={value} index={4}>
-        
-      </TabPanel>
-      <TabPanel value={value} index={5}>
-       
-      </TabPanel>
-      <TabPanel value={value} index={6}>
-        
-      </TabPanel>
     </div>
     </Container>
   );

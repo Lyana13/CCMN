@@ -3,6 +3,7 @@ import cmxAPI from "./cmxAPI";
 import {Line} from 'react-chartjs-2';
 import {Container} from "react-bootstrap";
 import Grid from '@material-ui/core/Grid';
+import chartLib from "./chartLib";
 
 class RepeatVisitors extends Component {
     constructor(props){
@@ -13,21 +14,9 @@ class RepeatVisitors extends Component {
             OCCASIONA: [],
             WEEKLY: [],
             YESTERDAY: [],
-            labels: ["2am-3am",
-                    "3am-4am",
-                    "5am-6am",
-                    "7am-8am",
-                    "9am-10am",
-                    "11am-12am",
-                    "12pm-1pm",
-                    "2pm-3pm",
-                    "4pm-5pm",
-                    "5pm-6pm",
-                    "6pm-7pm",
-                    "8pm-9pm",
-                    "10pm-11pm",
-            ]
-        } 
+            labels: []
+        }
+        this.setChartData = this.setChartData.bind(this)
     }
 
     componentDidMount(){
@@ -71,13 +60,9 @@ class RepeatVisitors extends Component {
             this.repeatVisitorsLastMouth()
           }
     }
-    commonRepeatVisitors(data){
-        //  console.log("DATARepeat",data);
-        let keys = Object.keys(data);
-        data = Object.values(data);
-        // console.log("DATARepeat",keys);
-        // console.log("DATA", data);
-        const daily =  data.map(e => e.DAILY);
+
+    setChartData(data, labels){
+      const daily =  data.map(e => e.DAILY);
         const firstTime = data.map(e => e.FIRST_TIME);
         const occasiona = data.map(e => e.OCCASIONA);
         const weekly = data.map(e => e.WEEKLY);
@@ -88,77 +73,49 @@ class RepeatVisitors extends Component {
             OCCASIONA:occasiona,
             WEEKLY:weekly,
             YESTERDAY:yesterday,
-            labels: keys
+            labels: labels
         });
-    }
-    commonRepeatVisitorsThreeDays(data){
-      // console.log("yce", data);
-      data = Object.values(data);
-      // console.log("values", data);
-      data =  data.map(e => {
-      return Object.values(e);
-      });
-      console.log("values", data);
-      var arrays = data[0].concat(data[1], data[2]);
-      // console.log("values", arrays);
-      const daily =  arrays.map(e => e.DAILY);
-      const firstTime = arrays.map(e => e.FIRST_TIME);
-      const occasiona = arrays.map(e => e.OCCASIONA);
-      const weekly = arrays.map(e => e.WEEKLY);
-      const yesterday = arrays.map(e => e.YESTERDAY);
-      console.log("d", firstTime);
-      this.setState({
-        DAILY:daily, 
-        FIRST_TIME:firstTime,
-        OCCASIONA:occasiona,
-        WEEKLY:weekly,
-        YESTERDAY:yesterday,
-        // labels: keys
-    });
     }
 
     repeatVisitorsToday(){
         cmxAPI.repeatVisitorsToday(data => {
-            this.commonRepeatVisitors(data)
+          chartLib.commonHourly(data, this.setChartData)
         });
     }
 
     repeatVisitorsYesterday(){
         cmxAPI.repeatVisitorsYesterday(data => {
-            this.commonRepeatVisitors(data)
+          chartLib.commonHourly(data, this.setChartData)
         });
     }
     
     repeatVisitorsThreeDays(){
         cmxAPI.repeatVisitorsThreeDays(data => {
-            this.commonRepeatVisitorsThreeDays(data)
+          chartLib.commonThreeDays(data, this.setChartData)
         });
     }
     repeatVisitorsLastweek(){
       cmxAPI.repeatVisitorsLastweek(data => {
-        console.log("7days", data);
-          this.commonRepeatVisitors(data)
+        chartLib.commonHourly(data, this.setChartData)
       });
   }
   repeatVisitors30days(){
     cmxAPI.repeatVisitors30days(data => {
-      console.log("30days", data);
-        this.commonRepeatVisitors(data)
+      chartLib.commonHourly(data, this.setChartData)
     });
   }
   repeatVisitorsThisMouth(){
-    cmxAPI.repeatVisitorsThisMouth(data => {
-      console.log("repeatVisitorsThisMouth", data);
-        this.commonRepeatVisitors(data)
+    const dates = chartLib.getThisMounthDates();
+    cmxAPI.repeatVisitorsThisMouth(dates[0], dates[1], data => {
+      chartLib.commonHourly(data, this.setChartData)
     });
   }
   repeatVisitorsLastMouth(){
-    cmxAPI.repeatVisitorsLastMouth(data => {
-      console.log("repeatVisitorsLastMouth", data);
-        this.commonRepeatVisitors(data)
+    const dates = chartLib.getLastMonthDates();
+    cmxAPI.repeatVisitorsThisMouth(dates[0], dates[1], data => {
+      chartLib.commonHourly(data, this.setChartData)
     });
   }
-    
     render() {
         return(
             <Container>          
