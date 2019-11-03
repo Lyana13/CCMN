@@ -19,7 +19,6 @@ class CurrentDevices extends Component  {
             totalVisitorsForYesterday: "",
             totalVisitorsLastweek: "",
             totalVisitorsThreeDays: "",
-
         }
     }
 

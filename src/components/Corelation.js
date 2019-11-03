@@ -129,7 +129,6 @@ class Corelation extends Component {
         })
     }
 
-
     render (){
         return (
             <Container>

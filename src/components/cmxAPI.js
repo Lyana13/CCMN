@@ -32,14 +32,52 @@ class cmxAPI {
         })
         return response.data[0].aesUId;
     }
-
-    getTotalConnectedCount(cb) {
-        axios.get(this.cmxUrl + "/api/analytics/v1/now/connectedDetected", {
-            auth: this.cmxAuth
+    /*Total Vidsitors  */
+    getVisitorsCountToday(cb) {
+        axios.get(this.presenceUrl + "/api/presence/v1/visitor/count/today?siteId=1513804707441", {
+            auth: this.presenceAuth
         }).then(response => {
-            return cb(response.data.total)
+            return cb(response.data)
         })
     }
+    getVisitorsCountYesterday(cb) {
+        axios.get(this.presenceUrl + "/api/presence/v1/visitor/count/yesterday?siteId=1513804707441", {
+            auth: this.presenceAuth
+        }).then(response => {
+            return cb(response.data)
+        })
+    }
+    getVisitorsCountThreeDays(cb) {
+        axios.get(this.presenceUrl + "/api/presence/v1/visitor/total/3days?siteId=1513804707441", {
+            auth: this.presenceAuth
+        }).then(response => {
+            console.log("rs", response);
+            return cb(response.data)
+        })
+    }
+    getVisitorsCountSevenDays(cb) {
+        axios.get(this.presenceUrl + "/api/presence/v1/visitor/total/lastweek?siteId=1513804707441", {
+            auth: this.presenceAuth
+        }).then(response => {
+            return cb(response.data)
+        })
+    }
+    getVisitorsCountThirtyDays(cb) {
+        axios.get(this.presenceUrl + "/api/presence/v1/visitor/total/lastmonth?siteId=1513804707441", {
+            auth: this.presenceAuth
+        }).then(response => {
+            return cb(response.data)
+        })
+    }
+    getVisitorsCountMonth(startDate, endDate, cb) {
+        axios.get(this.presenceUrl + "/api/presence/v1/visitor/total?siteId=1513804707441&startDate=" + startDate +"&endDate=" + endDate, {
+            auth: this.presenceAuth
+        }).then(response => {
+            return cb(response.data)
+        })
+    }
+    
+    /*Total Vidsitors  */
 
     // getFloorsInfo(cb) {
     //     axios.get(this.cmxUrl + "/api/config/v1/maps/info/System Campus/UNIT.Factory/", {
@@ -221,7 +259,7 @@ totalVisitorsToday(cb){
             return cb(response.data)
         })
     }
-    repeatVisitorsThisMouth(startDate, endDate, cb){
+    repeatVisitors(startDate, endDate, cb){
         axios.get(this.presenceUrl + "/api/presence/v1/repeatvisitors/daily?siteId=1513804707441&startDate=" + startDate +"&endDate=" + endDate, {
             auth: this.presenceAuth
         }).then(response => {

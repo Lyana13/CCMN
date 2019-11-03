@@ -45,7 +45,7 @@ class DwellChart extends Component {
     }
   
     componentDidUpdate(prevProps){
-      if(this.props.range !== prevProps.range) 
+      if (this.props.range !== prevProps.range) 
       {
         this.updateRangeDays(this.props.range);
       }
@@ -57,6 +57,7 @@ class DwellChart extends Component {
         legendPosition: 'bottom',
         location:'City'
     }
+    
     updateRangeDays(days){
       // cmxAPI.dwellDailyLastmonth(cb => console.log(cb));
       // cmxAPI.dwellDailyLastweek(cb => console.log(cb));

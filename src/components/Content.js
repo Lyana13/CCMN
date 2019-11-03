@@ -8,8 +8,6 @@ import RepeatVisitors from "./RepeatVisitors";
 import Calendar from 'react-calendar'
 import {Container, Row, Col} from "react-bootstrap";
 
-
-
   const optionsRange = [
     { value: 'Today', label: 'Today' },
     { value: 'Yesterday', label: 'Yesterday' },
@@ -22,15 +20,12 @@ import {Container, Row, Col} from "react-bootstrap";
   ];
 
 class Content extends React.Component  {
-  
     constructor(props){
         super(props);
 
         this.state = {
             dates: [new Date(), new Date()],
-            connected: "",
-            all: "",
-            detected: "",
+            totalVisitors: "",
             activeUser: "",
             kpi: "",
             alalitics: "",
@@ -44,35 +39,68 @@ class Content extends React.Component  {
     }
 
     async componentDidMount() {
-        this.updateTotalConnectedCount();
+        this.updateTotalConnectedCount(this.state.chartsRange);
         let sitesID = await cmxAPI.getSitesIP();
-        this.setState( {sitesID: sitesID} );
-        
+        this.setState( {sitesID: sitesID} ); 
     }
     
-    updateTotalConnectedCount() {
-        cmxAPI.getTotalConnectedCount(total => this.setState({
-            all: total.totalAll,
-            connected: total.totalConnected,
-            detected: total.totalDetected
-        }));
+    updateTotalConnectedCount(days) {
+        if( days === "Today"){
+            cmxAPI.getVisitorsCountToday(data => this.setState({
+                totalVisitors: data
+            }));
+        }
+        else if(days === "Yesterday") {
+            cmxAPI.getVisitorsCountYesterday(data => this.setState({
+                totalVisitors: data
+            }));
+        }
+        else if (days === "Last 3 Days") {
+            cmxAPI.getVisitorsCountThreeDays(data => this.setState({
+                totalVisitors: data
+            }));
+        }
+        else if (days === "Last 7 Days") {
+            cmxAPI.getVisitorsCountSevenDays(data => this.setState({
+                totalVisitors: data
+            }));
+        }
+        else if (days === "Last 30 Days") {
+            cmxAPI.getVisitorsCountThirtyDays(data => this.setState({
+                totalVisitors: data
+            }));
+        }
+        else if (days === "This Month"){
+            const dates = chartLib.getThisMounthDates();
+            cmxAPI.getVisitorsCountMonth(dates[0], dates[1], data => this.setState ({
+                totalVisitors: data
+            }));
+        }
+        else if (days === "Last Month") {
+            const dates = chartLib.getLastMonthDates();
+            cmxAPI.getVisitorsCountMonth(dates[0], dates[1], data => this.setState ({
+                totalVisitors: data
+            }));
+        }
     }
 
     handleRangeChange = selectedRange => {
-        let chartRange;
+        let { chartsRange } = this.state;
         let displayCalendar = "none";
         if(selectedRange.value == "Custom Date")
             displayCalendar = "block";
         else
-            chartRange = selectedRange.value
+            chartsRange = selectedRange.value
         // this.updateRangeDays(selectedRange.value);
-        this.setState({ selectedRange, displayCalendar, chartsRange: chartRange});
+        this.setState({ selectedRange, displayCalendar, chartsRange});
+        this.updateTotalConnectedCount(chartsRange);
+        
     }
-    applyRange(e){
-        var re = chartLib.dateToString(e);
-        console.log("e",re);
-        var s = e.toLocaleDateString();
-        console.log("s",s);
+
+    applyRange = e => {
+        let { dates } = this.state;
+        let chartsRange = [chartLib.dateToString(dates[0]), chartLib.dateToString(dates[1])];
+        this.setState({ chartsRange });
     }
     
     onCalendarChange = dates => {
@@ -91,7 +119,8 @@ class Content extends React.Component  {
                 <ul className="list-group content-wrap-text">
                     <Accordion defaultActiveKey="0"> 
                         <Card>
-                            <Accordion.Toggle as={Card.Header} eventKey="1">INFO
+                            <Accordion.Toggle as={Card.Header} eventKey="1">
+                            <li className="list-group-item list-group-item-action list-group-item-light">Total Visitors: <span className="highlight">{this.state.totalVisitors}</span><strong><span id="inner1"></span></strong></li>
                             </Accordion.Toggle>
                             <Accordion.Collapse eventKey="1">
                                 <Card.Body>
@@ -127,4 +156,5 @@ class Content extends React.Component  {
         )
     }
 }
+
 export default Content;

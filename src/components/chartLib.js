@@ -37,5 +37,4 @@ class chartLib {
       }
 }
 
-
 export default new chartLib()

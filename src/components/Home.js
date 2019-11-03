@@ -13,7 +13,6 @@ class Home extends Comment {
     }
 
     componentDidMount(){
-
     
     }
 
@@ -24,4 +23,5 @@ class Home extends Comment {
     }
 
 }
+
 export default Home;

@@ -4,7 +4,6 @@ import {Line} from 'react-chartjs-2';
 import {Container} from "react-bootstrap";
 import Grid from '@material-ui/core/Grid';
 import chartLib from "./chartLib";
-
 class RepeatVisitors extends Component {
     constructor(props){
         super(props);
@@ -59,9 +58,14 @@ class RepeatVisitors extends Component {
           else if (days === "Last Month") {
             this.repeatVisitorsLastMouth()
           }
+          else {
+            this.repeatVisitorsCustom(days[0], days[1])
+          }
     }
 
     setChartData(data, labels){
+
+      console.log("data",data);
       const daily =  data.map(e => e.DAILY);
         const firstTime = data.map(e => e.FIRST_TIME);
         const occasiona = data.map(e => e.OCCASIONA);
@@ -78,9 +82,7 @@ class RepeatVisitors extends Component {
     }
 
     repeatVisitorsToday(){
-        cmxAPI.repeatVisitorsToday(data => {
-          chartLib.commonHourly(data, this.setChartData)
-        });
+        
     }
 
     repeatVisitorsYesterday(){
@@ -106,13 +108,19 @@ class RepeatVisitors extends Component {
   }
   repeatVisitorsThisMouth(){
     const dates = chartLib.getThisMounthDates();
-    cmxAPI.repeatVisitorsThisMouth(dates[0], dates[1], data => {
+    cmxAPI.repeatVisitors(dates[0], dates[1], data => {
       chartLib.commonHourly(data, this.setChartData)
     });
   }
   repeatVisitorsLastMouth(){
     const dates = chartLib.getLastMonthDates();
-    cmxAPI.repeatVisitorsThisMouth(dates[0], dates[1], data => {
+    cmxAPI.repeatVisitors(dates[0], dates[1], data => {
+      chartLib.commonHourly(data, this.setChartData)
+    });
+  }
+  repeatVisitorsCustom(from, to){
+    console.log("sr to", from, to);
+    cmxAPI.repeatVisitors(from, to, data => {
       chartLib.commonHourly(data, this.setChartData)
     });
   }

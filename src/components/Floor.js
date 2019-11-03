@@ -5,8 +5,6 @@ import Select from 'react-select';
 import "awesome-notifications/dist/style.css";
 import {Container, Row, Col} from "react-bootstrap";
 
-
-
 const options = [
     { value: "735495909441273878", label: 'First' },
     { value: "735495909441273979", label: 'Second' },
@@ -111,7 +109,7 @@ class Floor extends React.Component {
         const floorId = this.state.selectedFloor.value
         return(
           <Container>
-                <p className="header__item">Search <input value={this.state.searchedMacAddress} onChange={this.changeMacAddress} id="header__item_search"/></p>
+                
                     <div style={{
                         backgroundImage: "url(" + this.state.image + ")",
                         backgroundSize: 'cover',
@@ -138,11 +136,13 @@ class Floor extends React.Component {
                         }  
                     </div>
                     <div className="side__bar">
+                    <p className="header__item">Search <input value={this.state.searchedMacAddress} onChange={this.changeMacAddress} id="header__item_search"/></p>
                     <Select 
                     value={this.state.selectedFloor}
                     onChange={this.handleFloorChange}
                     options={options}
                     />
+                    
                     </div> 
           </Container>
         )   

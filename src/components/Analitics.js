@@ -2,7 +2,6 @@ import React, {Component} from "react";
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
-
 class Analitics extends Component {
     constructor(props){
         super(props);
@@ -29,4 +28,3 @@ class Analitics extends Component {
     }
     
 export default Analitics;
-
