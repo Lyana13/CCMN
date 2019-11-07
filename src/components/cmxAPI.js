@@ -174,7 +174,7 @@ totalVisitorsToday(cb){
         })
         return resp;
     }
-
+/* number of dwell chart */
 
     dwellHourlyToday(cb){ 
         axios.get(this.presenceUrl + "/api/presence/v1/dwell/hourly/today?siteId=1513804707441", {
@@ -216,13 +216,15 @@ totalVisitorsToday(cb){
         })
     }
     
-    dwellDaily(startDate, endDate ,cb){ 
+    dwellDailyCustom(startDate, endDate ,cb){ 
         axios.get(this.presenceUrl + "/api/presence/v1/dwell/daily?siteId=1513804707441&startDate=" + startDate +"&endDate=" + endDate, {
             auth: this.presenceAuth
         }).then(response => {
             return cb(response.data)
         })
     }
+     /* number of dwell chart */
+
     /* number of repeat visitors */
     repeatVisitorsToday(cb){
         axios.get(this.presenceUrl + "/api/presence/v1/repeatvisitors/hourly/today?siteId=1513804707441", {
@@ -326,11 +328,13 @@ totalVisitorsToday(cb){
     }
 
     /*correlation*/
-    async dwellAverageforCorelation(date){
-       let res = await axios.get(this.presenceUrl + "/api/presence/v1/dwell/average?date=" + date + "&siteId=1513804707441", {
+
+    dwellAverage(startDate, endDate, cb){
+        axios.get(this.presenceUrl + "/api/presence/v1/dwell/dailyaverage?startDate=" + startDate + "&endDate=" + endDate + "&siteId=1513804707441", {
             auth: this.presenceAuth
+        }).then(response => {
+            return cb(response.data)
         })
-        return res.data;
     }
     dailyVisitors(startDate, endDate, cb){
         axios.get(this.presenceUrl + "/api/presence/v1/visitor/daily?startDate=" + startDate + "&endDate=" + endDate + "&siteId=1513804707441", {

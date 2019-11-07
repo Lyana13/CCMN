@@ -110,12 +110,12 @@ class Content extends React.Component  {
 
     render(){
         return (   
-            <Container>
-            <Row>
+            <Container >
+            <Row className="wrap">
                 <Col xs={12} sm={6} md={8} lg={9}>
                 <DwellChart range={this.state.chartsRange} />
                 </Col>
-                <Col xs={12} sm={6} md={4} lg={3}>   
+                <Col className="sidebarContent" xs={12} sm={6} md={4} lg={3}>   
                 <ul className="list-group content-wrap-text">
                     <Accordion defaultActiveKey="0"> 
                         <Card>

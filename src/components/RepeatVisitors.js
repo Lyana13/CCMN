@@ -81,8 +81,10 @@ class RepeatVisitors extends Component {
         });
     }
 
-    repeatVisitorsToday(){
-        
+    repeatVisitorsToday() {
+      cmxAPI.repeatVisitorsToday(data => {
+        chartLib.commonHourly(data, this.setChartData)
+      });
     }
 
     repeatVisitorsYesterday(){

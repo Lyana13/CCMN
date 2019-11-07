@@ -35,6 +35,28 @@ class chartLib {
         data = [data[0], data[1], data[2]].flat();
         cb(data, labels);
       }
+
+    aggregateByDayOfWeek(weeks, cb1, cb2) {
+        let days = weeks * 7;
+        let endDate = new Date();
+        let startDate = new Date();
+        startDate.setDate(startDate.getDate() - days);
+        startDate = this.dateToString(startDate);
+        endDate = this.dateToString(endDate);
+        cb1(startDate, endDate, data => {
+            let map = new Map();
+            data = Object.entries(data);
+            data.forEach(e => {
+                let dayOfWeek = new Date(e[0]).getDay();
+                let value = map.get(dayOfWeek) || 0;
+                value += e[1];
+                map.set(dayOfWeek, value);
+            })
+            let map2 = new Map();
+            map.forEach((value, key) => map2.set(key, Math.round(value / weeks)));
+            cb2([map2.get(0), map2.get(1), map2.get(2), map2.get(3), map2.get(4), map2.get(5), map2.get(6)])
+        });
+    }
 }
 
 export default new chartLib()

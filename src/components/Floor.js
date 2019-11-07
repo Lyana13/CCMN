@@ -109,7 +109,8 @@ class Floor extends React.Component {
         const floorId = this.state.selectedFloor.value
         return(
           <Container>
-                
+                <Row>
+                    <Col className="wrapperFloor">
                     <div style={{
                         backgroundImage: "url(" + this.state.image + ")",
                         backgroundSize: 'cover',
@@ -143,7 +144,9 @@ class Floor extends React.Component {
                     options={options}
                     />
                     
-                    </div> 
+                    </div>
+                    </Col>
+                </Row>
           </Container>
         )   
     }

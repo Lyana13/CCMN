@@ -2,132 +2,128 @@ import React, {Component} from "react";
 import cmxAPI from "./cmxAPI";
 import {Pie} from 'react-chartjs-2';
 import {Container, Row, Col} from "react-bootstrap";
+import chartLib from "./chartLib";
+
 
 class Corelation extends Component {
     
     constructor(props){
         super(props);
         this.state = {
-            chartData:[],
-            chartDailyVisitors: [],
-            kpiSummary: "",
-            peakHourCount: "", 
-            peakDayCount: "",
-            peakDate: "",
-            totalConnectedCount: "",
-            totalPasserbyCount: "",
+            sessionDurationData: [34, 65, 33, 22, 11, 55, 66]
         }
     }
     
     componentDidMount(){
-        this.proximitySummaryToday();
-        this.proximitySummaryYesterday();
-        this.proximitySummaryLastweek();
-        this.proximitySummaryThirtyDays();
-        this.proximitySummaryThisMouth();
-        this.proximitySummaryLastMouth();
-        this.getDweellTimeToday();
-        this.dwellAverageforCorelation();
-        this.dailyVisitors();
+        this.getSessionDurationData(12)
+        //chartLib.aggregateByDayOfWeek(12, cmxAPI.dwellAverage, (data) => this.setState({sessionDurationData: data}))
     }
-
-    commonProximityData(data){
-        this.setState({
-            peakHourCount: data.data.peakSummary.peakHourCount,
-            peakDayCount: data.data.peakSummary.peakDayCount,
-            peakDate: data.data.peakSummary.peakDate,
-            totalConnectedCount: data.data.totalConnectedCount,
-            totalPasserbyCount: data.data.totalPasserbyCount
-        })
-    }
-    dateToString(date){
-        let day = date.getDate(),
-            month = date.getMonth(),
-            year = date.getFullYear();
-        return year + "-" + month + "-" + day;
-    }
-    dailyVisitors(){
+    
+    getSessionDurationData = (weeks) => {
+        let days = weeks * 7;
         let endDate = new Date();
         let startDate = new Date();
-        startDate.setDate(startDate.getDate() - 7);
-        startDate = this.dateToString(startDate);
-        endDate = this.dateToString(endDate);
-        console.log("cs",endDate);
-        console.log("ssscs",startDate);
-        cmxAPI.dailyVisitors(startDate, endDate, data => {
+        startDate.setDate(startDate.getDate() - days);
+        startDate = chartLib.dateToString(startDate);
+        endDate = chartLib.dateToString(endDate);
+        cmxAPI.dwellAverage(startDate, endDate, data => {
+            console.log("data: ", data);
+            let map = new Map();
             data = Object.entries(data);
-            let array = [];
             data.forEach(e => {
-                console.log("e", e);
-                let indx = new Date(e[0]).getDay();
-                array[indx] = e[1];
-            });
-            this.setState({chartDailyVisitors: array});
-           console.log("arr", array);
+                let dayOfWeek = new Date(e[0]).getDay();
+                let value = map.get(dayOfWeek) || 0;
+                value += e[1];
+                map.set(dayOfWeek, value);
+            })
+            let map2 = new Map();
+            map.forEach((value, key) => map2.set(key, Math.round(value / weeks)));
+            this.setState( {sessionDurationData: [map2.get(0), map2.get(1), map2.get(2), map2.get(3), map2.get(4), map2.get(5), map2.get(6)]} )
         });
+    }
+
+    // dailyVisitors(){
+    //     let endDate = new Date();
+    //     let startDate = new Date();
+    //     startDate.setDate(startDate.getDate() - 7);
+    //     startDate = this.dateToString(startDate);
+    //     endDate = this.dateToString(endDate);
+    //     console.log("cs",endDate);
+    //     console.log("ssscs",startDate);
+    //     cmxAPI.dailyVisitors(startDate, endDate, data => {
+    //         data = Object.entries(data);
+    //         let array = [];
+    //         data.forEach(e => {
+    //             console.log("e", e);
+    //             let indx = new Date(e[0]).getDay();
+    //             array[indx] = e[1];
+    //         });
+    //         this.setState({chartDailyVisitors: array});
+    //        console.log("arr", array);
+    //     });
         
-    }
-    async dwellAverageforCorelation(){
-        let date = new Date();
-        let array = [];
-        // console.log("test",date);
-        for(var i = 0; i < 7; i++){
-            date.setDate(date.getDate() - 1);
-                let indx = date.getDay();
-                let result = await cmxAPI.dwellAverageforCorelation(this.dateToString(date));
-                // console.log("test",date);
-                array[indx] = result;
-        };
-        // console.log("test",array);
-        this.setState({
-            chartData: array
-        })
-    }
+    // }
+    // async dwellAverageforCorelation(){
+    //     let date = new Date();
+    //     let array = [];
+    //     // console.log("test",date);
+    //     for(var i = 0; i < 7; i++){
+    //         date.setDate(date.getDate() - 1);
+    //             let indx = date.getDay();
+    //             let result = await cmxAPI.dwellAverageforCorelation(this.dateToString(date));
+    //             // console.log("test",date);
+    //             array[indx] = result;
+    //     };
+    //     // console.log("test",array);
+    //     this.setState({
+    //         chartData: array
+    //     })
+    // }
 
-    getDweellTimeToday(){
-        cmxAPI.getDweellTimeToday(data => {
-            // console.log("getDweellTimeToday", data);
-        });
-    }
+    // getDweellTimeToday(){
+    //     cmxAPI.getDweellTimeToday(data => {
+    //         // console.log("getDweellTimeToday", data);
+    //     });
+    // }
 
-    proximitySummaryToday(){
-        cmxAPI.proximitySummaryToday(data => {
-            this.commonProximityData(data);
-        });
-    }
-    proximitySummaryYesterday(){
-        cmxAPI.proximitySummaryYesterday(data => {
-            this.commonProximityData(data);
-        });
-    }
-    proximitySummaryThreeDays(){
-        cmxAPI.proximitySummaryThreeDays(data => {
-            this.commonProximityData(data);
-        })
-    }
+    // proximitySummaryToday(){
+    //     cmxAPI.proximitySummaryToday(data => {
+    //         this.commonProximityData(data);
+    //     });
+    // }
+    // proximitySummaryYesterday(){
+    //     cmxAPI.proximitySummaryYesterday(data => {
+    //         this.commonProximityData(data);
+    //     });
+    // }
+    // proximitySummaryThreeDays(){
+    //     cmxAPI.proximitySummaryThreeDays(data => {
+    //         this.commonProximityData(data);
+    //     })
+    // }
 
-    proximitySummaryLastweek(){
-        cmxAPI.proximitySummaryLastweek(data => {
-            this.commonProximityData(data);
-        })
-    }
+    // proximitySummaryLastweek(){
+    //     cmxAPI.proximitySummaryLastweek(data => {
+    //         this.commonProximityData(data);
+    //     })
+    // }
 
-    proximitySummaryThirtyDays(){
-        cmxAPI.proximitySummaryThirtyDays(data => {
-            this.commonProximityData(data);
-        })
-    }
+    // proximitySummaryThirtyDays(){
+    //     cmxAPI.proximitySummaryThirtyDays(data => {
+    //         this.commonProximityData(data);
+    //     })
+    // }
 
-    proximitySummaryThisMouth(){
-        cmxAPI.proximitySummaryThisMouth(data => {
-            this.commonProximityData(data);
-        })
-    }
-    proximitySummaryLastMouth(){
-        cmxAPI.proximitySummaryLastMouth(data => {
-            this.commonProximityData(data);
-        })
-    }
+    // proximitySummaryThisMouth(){
+    //     cmxAPI.proximitySummaryThisMouth(data => {
+    //         this.commonProximityData(data);
+    //     })
+    // }
+    // proximitySummaryLastMouth(){
+    //     cmxAPI.proximitySummaryLastMouth(data => {
+    //         this.commonProximityData(data);
+    //     })
+    // }
 
     render (){
         return (
@@ -138,7 +134,7 @@ class Corelation extends Component {
                         <p>Peak Day: {this.state.peakDayCount}visitors on {this.state.peakDate}</p>
                         <p>totalConnectedCount: {this.state.totalConnectedCount}totalConnectedCount {this.state.totalPasserbyCount}</p>
                     </Col> */}
-                    <Col item sm={12} lg={6}>
+                    {/* <Col item sm={12} lg={6}>
                         <Pie data={{
                             labels: [
                             'Visitors',
@@ -185,15 +181,14 @@ class Corelation extends Component {
                             }
                         }}
                         />
-                    </Col>
+                    </Col> */}
                     <Col item sm={12} lg={6}>
                     <Pie
                         data = {{
-                            labels:['Passerby', 'Visitors'],
+                            labels:['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
                             datasets:[
                                 {
-                                    label:'Number of visitors',
-                                    data: this.state.chartDailyVisitors,
+                                    data: this.state.sessionDurationData,
                                     backgroundColor:[
                                         'rgba(102,51,153,1)',
                                         'rgba(249, 61, 47, 1)',
@@ -209,13 +204,13 @@ class Corelation extends Component {
                         }}
                         options={{ 
                             title:{
-                                display:this.props.displayTitle,
-                                text: 'Correlation between visitors and device manufactures',
+                                display: true,
+                                text: 'Correlation between session duration and the day of the week',
                                 fontSize: 20,
                             },
                             legend:{
-                                display:this.props.displayLegend,
-                                position:this.props.legendPosition
+                                display: true,
+                                position: 'top'
                             }
                         }}
                     />
