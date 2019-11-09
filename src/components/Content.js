@@ -30,7 +30,6 @@ class Content extends React.Component  {
             kpi: "",
             alalitics: "",
             forecasting: "",
-            sitesID: "",
             selectedRange: optionsRange[0],
             displayCalendar: "none",
             chartsRange: optionsRange[0].value
@@ -40,8 +39,6 @@ class Content extends React.Component  {
 
     async componentDidMount() {
         this.updateTotalConnectedCount(this.state.chartsRange);
-        let sitesID = await cmxAPI.getSitesIP();
-        this.setState( {sitesID: sitesID} ); 
     }
     
     updateTotalConnectedCount(days) {
@@ -82,6 +79,11 @@ class Content extends React.Component  {
                 totalVisitors: data
             }));
         }
+        else {
+            cmxAPI.getVisitorsCountMonth(days[0], days[1], data => this.setState ({
+                totalVisitors: data
+            }));
+        }
     }
 
     handleRangeChange = selectedRange => {
@@ -89,17 +91,20 @@ class Content extends React.Component  {
         let displayCalendar = "none";
         if(selectedRange.value == "Custom Date")
             displayCalendar = "block";
-        else
+        else{
             chartsRange = selectedRange.value
+            this.updateTotalConnectedCount(chartsRange);
+        }
         // this.updateRangeDays(selectedRange.value);
         this.setState({ selectedRange, displayCalendar, chartsRange});
-        this.updateTotalConnectedCount(chartsRange);
         
+    
     }
 
     applyRange = e => {
         let { dates } = this.state;
         let chartsRange = [chartLib.dateToString(dates[0]), chartLib.dateToString(dates[1])];
+        this.updateTotalConnectedCount(chartsRange);
         this.setState({ chartsRange });
     }
     
@@ -124,9 +129,10 @@ class Content extends React.Component  {
                             </Accordion.Toggle>
                             <Accordion.Collapse eventKey="1">
                                 <Card.Body>
-                                    <li className="list-group-item list-group-item-action list-group-item-light">Connected: <span className="highlight">{this.state.connected}</span><strong><span id="inner1"></span></strong></li>
+                                <img id="pas" src="/dog.jpg" alt="dog" />
+                                    {/* <li className="list-group-item list-group-item-action list-group-item-light">Connected: <span className="highlight">{this.state.connected}</span><strong><span id="inner1"></span></strong></li>
                                     <li className="list-group-item list-group-item-action list-group-item-light">All: <span className="highlight">{this.state.all}</span><strong><span id="inner2"></span></strong></li>
-                                    <li className="list-group-item list-group-item-action list-group-item-light">Detected: <span className="highlight">{this.state.detected}</span><strong><span id="inner3"></span></strong></li>
+                                    <li className="list-group-item list-group-item-action list-group-item-light">Detected: <span className="highlight">{this.state.detected}</span><strong><span id="inner3"></span></strong></li> */}
                                 </Card.Body>
                             </Accordion.Collapse>
                         </Card>

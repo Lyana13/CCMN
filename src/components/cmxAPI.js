@@ -1,4 +1,6 @@
 import axios from 'axios';
+import "awesome-notifications/dist/style.css";
+import AWN from 'awesome-notifications';
 
 class cmxAPI {
     cmxUrl = "https://cisco-cmx.unit.ua"
@@ -8,6 +10,11 @@ class cmxAPI {
     presencePass = "Passw0rd"
     cmxAuth = {username: this.login, password: this.cmxPass}
     presenceAuth = { username: this.login, password: this.presencePass }
+    notifier = new AWN({});
+
+    handleError = (error) => {
+        this.notifier.alert("WTF?"); 
+    }
 
     getFloorImage(floorName, cb) {
         axios.get(this.cmxUrl + "/api/config/v1/maps/image/System Campus/UNIT.Factory/" + floorName, {
@@ -17,35 +24,30 @@ class cmxAPI {
             let reader = new FileReader();
             reader.onloadend = () => cb(reader.result);
             reader.readAsDataURL(response.data);
-        })
+        }).catch(this.handleError)
     }
     
     async getAllClients() {
         const resp = await axios.get(this.cmxUrl + "/api/location/v2/clients ", {
             auth: this.cmxAuth
-        })
-        return resp.data;
+        }).catch(this.handleError)
+        return resp ? resp.data : [];
     }
-    async getSitesIP(){
-        const response= await axios.get(this.presenceUrl + "/api/config/v1/sites", {
-            auth: this.presenceAuth
-        })
-        return response.data[0].aesUId;
-    }
+
     /*Total Vidsitors  */
     getVisitorsCountToday(cb) {
         axios.get(this.presenceUrl + "/api/presence/v1/visitor/count/today?siteId=1513804707441", {
             auth: this.presenceAuth
         }).then(response => {
             return cb(response.data)
-        })
+        }).catch(this.handleError)
     }
     getVisitorsCountYesterday(cb) {
         axios.get(this.presenceUrl + "/api/presence/v1/visitor/count/yesterday?siteId=1513804707441", {
             auth: this.presenceAuth
         }).then(response => {
             return cb(response.data)
-        })
+        }).catch(this.handleError)
     }
     getVisitorsCountThreeDays(cb) {
         axios.get(this.presenceUrl + "/api/presence/v1/visitor/total/3days?siteId=1513804707441", {
@@ -53,83 +55,73 @@ class cmxAPI {
         }).then(response => {
             console.log("rs", response);
             return cb(response.data)
-        })
+        }).catch(this.handleError)
     }
     getVisitorsCountSevenDays(cb) {
         axios.get(this.presenceUrl + "/api/presence/v1/visitor/total/lastweek?siteId=1513804707441", {
             auth: this.presenceAuth
         }).then(response => {
             return cb(response.data)
-        })
+        }).catch(this.handleError)
     }
     getVisitorsCountThirtyDays(cb) {
         axios.get(this.presenceUrl + "/api/presence/v1/visitor/total/lastmonth?siteId=1513804707441", {
             auth: this.presenceAuth
         }).then(response => {
             return cb(response.data)
-        })
+        }).catch(this.handleError)
     }
     getVisitorsCountMonth(startDate, endDate, cb) {
         axios.get(this.presenceUrl + "/api/presence/v1/visitor/total?siteId=1513804707441&startDate=" + startDate +"&endDate=" + endDate, {
             auth: this.presenceAuth
         }).then(response => {
             return cb(response.data)
-        })
+        }).catch(this.handleError)
     }
-    
-    /*Total Vidsitors  */
-
-    // getFloorsInfo(cb) {
-    //     axios.get(this.cmxUrl + "/api/config/v1/maps/info/System Campus/UNIT.Factory/", {
-    //         auth: this.cmxAuth
-    //     }).then(response => {
-    //         return cb(response.data.floorList)
-    //     })
-    // }
 
     getActiveClients(cb) {
         axios.get(this.cmxUrl + "/api/location/v2/clients/active", {
             auth: this.cmxAuth
         }).then(response => {
-            console.log("active", response);
             return cb(response);
-        })
+        }).catch(this.handleError)
     }
-/*Count visiter */
-totalVisitorsToday(cb){
-    axios.get(this.presenceUrl + "/api/presence/v1/visitor/count/today?siteId=1513804707441", {
-      auth: this.presenceAuth  
-    }).then(response => {
-        return cb(response.data)
-    })
-}
+
+    /*Count visiter */
+    totalVisitorsToday(cb){
+        axios.get(this.presenceUrl + "/api/presence/v1/visitor/count/today?siteId=1513804707441", {
+            auth: this.presenceAuth  
+        }).then(response => {
+            return cb(response.data)
+        }).catch(this.handleError)
+    }
     totalVisitorsYesterday(cb){
         axios.get(this.presenceUrl + "/api/presence/v1/visitor/count/yesterday?siteId=1513804707441", {
           auth: this.presenceAuth  
         }).then(response => {
             return cb(response.data)
-        })
+        }).catch(this.handleError)
     }
     totalVisitorsThreeDays(cb){
         axios.get(this.presenceUrl + "/api/presence/v1/visitor/total/3days?siteId=1513804707441", {
           auth: this.presenceAuth  
         }).then(response => {
             return cb(response.data)
-        })
+        }).catch(this.handleError)
     }
-        totalVisitorsLastweek(cb){
-            axios.get(this.presenceUrl + "/api/presence/v1/visitor/lastweek/?siteId=1513804707441", {
-              auth: this.presenceAuth  
-            }).then(response => {
-                return cb(response.data)
-            })
-        }
+    totalVisitorsLastweek(cb){
+        axios.get(this.presenceUrl + "/api/presence/v1/visitor/lastweek/?siteId=1513804707441", {
+            auth: this.presenceAuth  
+        }).then(response => {
+            return cb(response.data)
+        }).catch(this.handleError)
+    }
         totalVisitors30Days(cb){
             axios.get(this.presenceUrl + "/api/presence/v1/visitor/total/lastmonth?siteId=1513804707441", {
               auth: this.presenceAuth  
             }).then(response => {
                 return cb(response.data)
-            })
+            }).catch(this.handleError)
         }
     /*Count visiter */
     
@@ -138,42 +130,9 @@ totalVisitorsToday(cb){
             auth: this.presenceAuth
         }).then(response => {
             return cb(response.data)
-        })
+        }).catch(this.handleError)
     }
 
-    async getDweellTimeToday(){
-        const resp = await axios.get(this.presenceUrl + "/api/presence/v1/dwell/average/today?siteId=1513804707441", {
-            auth: this.presenceAuth
-        })
-        return resp;
-    }
-    async getDweellTime3days(){
-        const resp = await axios.get(this.presenceUrl + "/api/presence/v1/dwell/average/3days?siteId=1513804707441", {
-            auth: this.presenceAuth
-        })
-        return resp;
-    }
-
-    async getDweellTimeYesterday(){
-        const resp = await axios.get(this.presenceUrl + "/api/presence/v1/dwell/average/yesterday?siteId=1513804707441", {
-            auth: this.presenceAuth
-        })
-        return resp;
-    }
-
-    async getDweellTime7days(){
-        const resp = await axios.get(this.presenceUrl + "/api/presence/v1/dwell/average/lastweek?siteId=1513804707441", {
-            auth: this.presenceAuth
-        })
-        return resp;
-    }
-  
-    async getDweellTimeLastmonth(){
-        const resp = await axios.get(this.presenceUrl + "/api/presence/v1/dwell/average/lastmonth?siteId=1513804707441", {
-            auth: this.presenceAuth
-        })
-        return resp;
-    }
 /* number of dwell chart */
 
     dwellHourlyToday(cb){ 
@@ -181,7 +140,7 @@ totalVisitorsToday(cb){
             auth: this.presenceAuth
         }).then(response => {
             return cb(response.data)
-        })
+        }).catch(this.handleError)
     }
 
     dwellHourlyYesterday(cb){ 
@@ -189,7 +148,7 @@ totalVisitorsToday(cb){
             auth: this.presenceAuth
         }).then(response => {
             return cb(response.data)
-        })
+        }).catch(this.handleError)
     }
 
     dwellHourlyThreeDays(cb){ 
@@ -197,7 +156,7 @@ totalVisitorsToday(cb){
             auth: this.presenceAuth
         }).then(response => {
             return cb(response.data)
-        })
+        }).catch(this.handleError)
     }
 
     dwellDailyLastweek(cb){ 
@@ -205,7 +164,7 @@ totalVisitorsToday(cb){
             auth: this.presenceAuth
         }).then(response => {
             return cb(response.data)
-        })
+        }).catch(this.handleError)
     }
 
     dwellDaily30Days(cb){ 
@@ -213,7 +172,7 @@ totalVisitorsToday(cb){
             auth: this.presenceAuth
         }).then(response => {
             return cb(response.data)
-        })
+        }).catch(this.handleError)
     }
     
     dwellDailyCustom(startDate, endDate ,cb){ 
@@ -221,7 +180,7 @@ totalVisitorsToday(cb){
             auth: this.presenceAuth
         }).then(response => {
             return cb(response.data)
-        })
+        }).catch(this.handleError)
     }
      /* number of dwell chart */
 
@@ -231,117 +190,72 @@ totalVisitorsToday(cb){
             auth: this.presenceAuth
         }).then(response => {
             return cb(response.data)
-        })
+        }).catch(this.handleError)
     }
     repeatVisitorsYesterday(cb){
         axios.get(this.presenceUrl + "/api/presence/v1/repeatvisitors/hourly/yesterday?siteId=1513804707441", {
             auth: this.presenceAuth
         }).then(response => {
             return cb(response.data)
-        })
+        }).catch(this.handleError)
     }
     repeatVisitorsThreeDays(cb){
         axios.get(this.presenceUrl + "/api/presence/v1/repeatvisitors/hourly/3days?siteId=1513804707441", {
             auth: this.presenceAuth
         }).then(response => {
             return cb(response.data)
-        })
+        }).catch(this.handleError)
     }
     repeatVisitorsLastweek(cb){
         axios.get(this.presenceUrl + "/api/presence/v1/repeatvisitors/daily/lastweek?siteId=1513804707441", {
             auth: this.presenceAuth
         }).then(response => {
             return cb(response.data)
-        })
+        }).catch(this.handleError)
     }
     repeatVisitors30days(cb){
         axios.get(this.presenceUrl + "/api/presence/v1/repeatvisitors/daily/lastmonth?siteId=1513804707441", {
             auth: this.presenceAuth
         }).then(response => {
             return cb(response.data)
-        })
+        }).catch(this.handleError)
     }
     repeatVisitors(startDate, endDate, cb){
         axios.get(this.presenceUrl + "/api/presence/v1/repeatvisitors/daily?siteId=1513804707441&startDate=" + startDate +"&endDate=" + endDate, {
             auth: this.presenceAuth
         }).then(response => {
             return cb(response.data)
-        })
+        }).catch(this.handleError)
     }
     repeatVisitorsLastMouth(startDate, endDate, cb){
         axios.get(this.presenceUrl + "/api/presence/v1/repeatvisitors/count?siteId=1513804707441&startDate=" + startDate +"&endDate=" + endDate, {
             auth: this.presenceAuth
         }).then(response => {
             return cb(response.data)
-        })
-    }
-    /* proxi*/
-    proximitySummaryToday(cb){
-        axios.get(this.presenceUrl + "/api/presence/v1/kpisummary//today?siteId=1513804707441", {
-            auth: this.presenceAuth
-        }).then(response => {
-            return cb(response)
-        })
-    }
-    proximitySummaryYesterday(cb){
-        axios.get(this.presenceUrl + " /api/presence/v1/kpisummary//yesterday?siteId=1513804707441", {
-            auth: this.presenceAuth
-        }).then(response => {
-            return cb(response)
-        })
-    }
-    
-    proximitySummaryThreeDays(cb){
-        axios.get(this.presenceUrl + "/api/presence/v1/kpisummary//3days?siteId=1513804707441", {
-            auth: this.presenceAuth
-        }).then(response => {
-            return cb(response)
-        })
-    }
-    proximitySummaryLastweek(cb){
-        axios.get(this.presenceUrl + "/api/presence/v1/kpisummary//lastweek?siteId=1513804707441", {
-            auth: this.presenceAuth
-        }).then(response => {
-            return cb(response)
-        })
-    }
-    proximitySummaryThirtyDays(cb){
-        axios.get(this.presenceUrl + "/api/presence/v1/kpisummary//lastmonth?siteId=1513804707441", {
-            auth: this.presenceAuth
-        }).then(response => {
-            return cb(response)
-        })
-    }
-    proximitySummaryThisMouth(startDate, endDate, cb){
-        axios.get(this.presenceUrl + "/api/presence/v1/kpisummary/?startDate=" + startDate + "&endDate=" + endDate + "&siteId=1513804707441", {
-            auth: this.presenceAuth
-        }).then(response => {
-            return cb(response)
-        })
-    }
-    proximitySummaryLastMouth(startDate, endDate, cb){
-        axios.get(this.presenceUrl + "/api/presence/v1/kpisummary/?startDate=" + startDate + "&endDate=" + endDate + "&siteId=1513804707441", {
-            auth: this.presenceAuth
-        }).then(response => {
-            return cb(response)
-        })
+        }).catch(this.handleError)
     }
 
     /*correlation*/
-
-    dwellAverage(startDate, endDate, cb){
-        axios.get(this.presenceUrl + "/api/presence/v1/dwell/dailyaverage?startDate=" + startDate + "&endDate=" + endDate + "&siteId=1513804707441", {
+    async dwellAverage(startDate, endDate){
+        const resp = await axios.get(this.presenceUrl + "/api/presence/v1/dwell/average?startDate=" + startDate + "&endDate=" + endDate + "&siteId=1513804707441", {
             auth: this.presenceAuth
-        }).then(response => {
-            return cb(response.data)
-        })
+        }).catch(this.handleError)
+        return resp ? resp.data : 0;
     }
+    
     dailyVisitors(startDate, endDate, cb){
         axios.get(this.presenceUrl + "/api/presence/v1/visitor/daily?startDate=" + startDate + "&endDate=" + endDate + "&siteId=1513804707441", {
             auth: this.presenceAuth
         }).then(response => {
             return cb(response.data)
-        })
+        }).catch(this.handleError)
+    }
+   dailyPasserby(startDate, endDate, cb){
+        axios.get(this.presenceUrl + "/api/presence/v1/passerby/daily?startDate=" + startDate + "&endDate=" + endDate + "&siteId=1513804707441", {
+            auth: this.presenceAuth
+        }).then(response => {
+            return cb(response.data)
+        }).catch(this.handleError)
     }
 }
 

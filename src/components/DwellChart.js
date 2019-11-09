@@ -86,17 +86,6 @@ class DwellChart extends Component {
         this.dwellCustom(days[0], days[1])
       }
   }
-    // async dwellTimeuUpdateRangeDays(days){
-    //     let today =  await cmxAPI.getDweellTimeToday();
-    //     let three =  await cmxAPI.getDweellTime3days();   
-    //     let yesterday =  await cmxAPI.getDweellTimeYesterday();
-    //     let lastweek =  await cmxAPI.getDweellTime7days();
-    //     let lastmonth =  await cmxAPI.getDweellTimeLastmonth();
-    //     let kpi = await cmxAPI.KPISummaryToday();
-    //     // console.log("lastmonthlastmonth", kpi);
-    //     this.setState({chartData: [today.data, three.data,yesterday.data, lastweek.data, lastmonth.data]})
-    // }
-
 
     setChartData(data, labels){
       const eightPlusHours =  data.map(e => e.EIGHT_PLUS_HOURS);
@@ -146,13 +135,13 @@ class DwellChart extends Component {
 
     dwellDailyThisMonth() {
       const dates = chartLib.getThisMounthDates();
-      cmxAPI.dwellDaily(dates[0], dates[1], data => {
+      cmxAPI.dwellDailyCustom(dates[0], dates[1], data => {
         chartLib.commonHourly(data, this.setChartData);
       });
     }
     dwellDailyLastMonth(){
       const dates = chartLib.getLastMonthDates();
-        cmxAPI.dwellDaily(dates[0], dates[1], data => {
+        cmxAPI.dwellDailyCustom(dates[0], dates[1], data => {
           chartLib.commonHourly(data, this.setChartData);
       });
     }
