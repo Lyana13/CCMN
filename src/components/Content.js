@@ -117,7 +117,7 @@ class Content extends React.Component  {
         return (   
             <Container >
             <Row className="wrap">
-                <Col xs={12} sm={6} md={8} lg={9}>
+                <Col lg={8}>
                 <DwellChart range={this.state.chartsRange} />
                 </Col>
                 <Col className="sidebarContent" xs={12} sm={6} md={4} lg={3}>   
@@ -141,7 +141,7 @@ class Content extends React.Component  {
                     options={optionsRange}
                 />
                 <div style={{boxShadow: "5px 5px 25px", width: "350px", display: this.state.displayCalendar }}>
-                <div onClick={this.reset}>
+                <div className ="calendar" onClick={this.reset}>
                     <Calendar 
                         onChange={this.onCalendarChange}
                         selectRange={true}
@@ -151,7 +151,7 @@ class Content extends React.Component  {
                 <button onClick={this.applyRange}>Apply</button>
             </div>  
             </Col>
-                <Col xs={12} sm={6} md={8} lg={9}>
+                <Col lg={8}>
                 <RepeatVisitors range={this.state.chartsRange} />
                 </Col> 
         </Row> 

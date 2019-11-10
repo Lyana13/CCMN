@@ -1,6 +1,9 @@
 body {
   background: antiquewhite;
 }
+.calendar{
+  max-height: 1px;
+}
 @media only screen and (min-width: 768px){
   .sidebar__wrap{
     width: 100%;
@@ -101,7 +104,6 @@ li.colorTwoStep{
     position: fixed;
     bottom: 0;
     right: 0;
-    height: 5%;
     background: linear-gradient(-90deg, #7F0099, #0059B3);
 }
 .footer-text {
