@@ -1,7 +1,49 @@
+body {
+  background: antiquewhite;
+}
 @media only screen and (min-width: 768px){
   .sidebar__wrap{
     width: 100%;
   }
+}
+.chart {
+  margin-top: 5%;
+}
+.fa-search{
+  font-size: 24px;
+  font-weight: 700;
+  color: blueviolet;
+}
+.chart_wrap {
+  margin: 0 auto;
+  display: flex;
+  margin: 2% 17%;
+}
+.wrap_search {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: baseline;
+}
+.search {
+  font-size: 16px;
+  font-weight: 700;
+  color: blueviolet;
+}
+.wrap_header {
+  display: flex;
+  flex-direction: row;
+}
+p.header_item.highlight {
+  display: flex;
+  justify-items: flex-end;
+}
+.wrap_connected{
+  color: antiquewhite;
+  padding: 0 15px;
+}
+.MuiTabs-flexContainer {
+  display: flex;
+  justify-content: space-around;
 }
 #pas{
   width: 100%;
@@ -28,6 +70,7 @@ li.colorTwoStep{
   color: antiquewhite;
 }
 .header{
+  padding: 3% 9% 1% 8%;
 	font-family: 'Josefin Sans', sans-serif;
 	display: flex;
 	justify-content: space-between;
@@ -35,7 +78,7 @@ li.colorTwoStep{
 	margin-bottom: 2%;
 }
 .header__item{
-	color: blue;
+  color: antiquewhite;
 }
 .highlight {
   font-size: 20px;
@@ -84,8 +127,8 @@ li.colorTwoStep{
     top: 10%;
   }
   .side__bar {
-    width: 15%;
-    margin: 0 13% 5% 10%;
+    width: 23%;
+    margin: 2% 13% 5% 10%;
   }
 }
 
@@ -95,23 +138,5 @@ li.colorTwoStep{
     .valid {
       color: green;
     }
-
-/*footer*/
-
-/* .App {
-  text-align: center;
-}
-
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-} */
 
 

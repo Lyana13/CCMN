@@ -70,8 +70,8 @@ class Chart extends Component {
     render (){
         return (
             <Container >
-                <Row >
-                    <Col item  sm={12} lg={8}>
+                <Row className="chart">
+                    <Col sm={12} lg={12}>
                     <Bar
                         data = {{
                             labels: this.state.chartLabels,

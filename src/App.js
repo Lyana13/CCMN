@@ -6,10 +6,7 @@ import Content from "./components/Content.js";
 import Chart from "./components/Chart";
 import Nav from "./components/Nav.js";
 import Corelation from "./components/Corelation.js";
-import RepeatVisitors from "./components/RepeatVisitors.js";
 import Floor from "./components/Floor.js";
-import CurrentDevices from "./components/CurrentDevices.js";
-import Analitics from "./components/Analitics";
 
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
@@ -39,11 +36,8 @@ componentWillMount(){
             <Nav />
             <Switch>
                 <Route path="/chart" component={ Chart } chartData={this.state.chartData}/>
-                <Route path="/analitics" component={ Analitics } />
-                <Route path="/repeat_visitors" component={ RepeatVisitors } />
                 <Route path="/floor" exact component={ Floor } />
                 <Route path="/corelation" component={ Corelation } />
-                <Route path="/devices" component={ CurrentDevices } />
                 <Route path="/content" component={Content} />
             </Switch> 
             <Footer /> 

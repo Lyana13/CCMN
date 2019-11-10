@@ -8,13 +8,9 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import { Container } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import FaceTwoToneIcon from '@material-ui/icons/FaceTwoTone';
 import BarChartTwoToneIcon from '@material-ui/icons/BarChartTwoTone';
 import RoomSharpIcon from '@material-ui/icons/RoomSharp';
 import EqualizerIcon from '@material-ui/icons/Equalizer';
-import TrendingUpIcon from '@material-ui/icons/TrendingUp';
-import PieChartIcon from '@material-ui/icons/PieChart';
-import ImportContactsIcon from '@material-ui/icons/ImportContacts';
 import ImportantDevicesIcon from '@material-ui/icons/ImportantDevices';
 
 function TabPanel(props) {
@@ -81,8 +77,6 @@ export default function ScrollableTabsButtonForce() {
           <Tab value="floor" component={Link} to="/floor" label="Floors" icon={<BarChartTwoToneIcon />} {...a11yProps(5)} />
           <Tab value="content" component={Link} to="/content" label="Analytics and Presence" icon={<RoomSharpIcon />} {...a11yProps(6)} />
           <Tab value="chart" component={Link} to="/chart" label="Forecasting" icon={<EqualizerIcon />} {...a11yProps(5)} />
-          <Tab value="devices" component={Link} to="/devices" label="Current Devices" icon={<EqualizerIcon />} {...a11yProps(0)} />
-          <Tab value="active" component={Link} to="/active" label="Data" icon={<EqualizerIcon />} {...a11yProps(11)} />
           <Tab value="corelation" component={Link} to="/corelation" label="Corelation" icon={<ImportantDevicesIcon />} {...a11yProps(11)} />
         </Tabs>
       </AppBar>

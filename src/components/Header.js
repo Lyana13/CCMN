@@ -28,10 +28,10 @@ class Header extends React.Component {
         return (
             <header className="header">
                 <h3 className="header__item">Welcome to <span className="highlight">CCMN!</span></h3>
-                <div>
-                    <p>All: {this.state.all}</p>
-                    <p>Detected: {this.state.detected}</p>
-                    <p>Connected: {this.state.connected}</p>
+                <div className="wrap_header">
+                    <p className="header_item highlight">All devices: <p className="wrap_connected">{this.state.all}</p></p>
+                    <p className="header_item highlight">Detected: <p className="wrap_connected">{this.state.detected}</p></p>
+                    <p className="header_item highlight">Connected: <p className="wrap_connected" >{this.state.connected}</p></p>
                 </div>
             </header>   
         )

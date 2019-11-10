@@ -4,6 +4,7 @@ import {Line} from 'react-chartjs-2';
 import {Container} from "react-bootstrap";
 import Grid from '@material-ui/core/Grid';
 import chartLib from "./chartLib";
+
 class RepeatVisitors extends Component {
     constructor(props){
         super(props);

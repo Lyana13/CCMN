@@ -137,7 +137,13 @@ class Floor extends React.Component {
                         }  
                     </div>
                     <div className="side__bar">
-                    <p className="header__item">Search <input value={this.state.searchedMacAddress} onChange={this.changeMacAddress} id="header__item_search"/></p>
+                    <div className="wrap_search">
+                    <p><i class="fa fa-search" aria-hidden="true"></i></p>
+                        <p className="search">Search <input value={this.state.searchedMacAddress} onChange={this.changeMacAddress} id="header__item_search"/></p>
+                        
+                    </div>
+                    
+                    
                     <Select 
                     value={this.state.selectedFloor}
                     onChange={this.handleFloorChange}
