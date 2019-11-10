@@ -130,9 +130,6 @@ class Content extends React.Component  {
                             <Accordion.Collapse eventKey="1">
                                 <Card.Body>
                                 <img id="pas" src="/dog.jpg" alt="dog" />
-                                    {/* <li className="list-group-item list-group-item-action list-group-item-light">Connected: <span className="highlight">{this.state.connected}</span><strong><span id="inner1"></span></strong></li>
-                                    <li className="list-group-item list-group-item-action list-group-item-light">All: <span className="highlight">{this.state.all}</span><strong><span id="inner2"></span></strong></li>
-                                    <li className="list-group-item list-group-item-action list-group-item-light">Detected: <span className="highlight">{this.state.detected}</span><strong><span id="inner3"></span></strong></li> */}
                                 </Card.Body>
                             </Accordion.Collapse>
                         </Card>

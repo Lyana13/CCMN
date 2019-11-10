@@ -8,6 +8,7 @@ class Chart extends Component {
         super(props);
         this.state = {
             chartData:[],
+            chartLabels: []
         }
     }
 
@@ -29,13 +30,25 @@ class Chart extends Component {
         return year + "-" + month + "-" + day;
     }
 
+    generateChartData(map){
+        let now = new Date();
+        let labels = [];
+        let data = [];
+        for(let i = 1; i <= 7; i++){
+            let date = new Date(now.getFullYear(), now.getMonth(), now.getDate() + i);
+            labels.push(this.dateToString(date));
+            let dayOfWeek = date.getDay();
+            let connectedCount = map.get(dayOfWeek);
+            data.push(connectedCount);
+        }
+        return [labels, data]; 
+    }
+
     forcasting(weeks) {
         let days = weeks * 7;
-        let endDate = new Date();
-        let startDate = new Date();
-        startDate.setDate(startDate.getDate() - days);
-        startDate = this.dateToString(startDate);
-        endDate = this.dateToString(endDate);
+        let now = new Date();
+        let endDate = this.dateToString(now);
+        let startDate = this.dateToString(new Date(now.getFullYear(), now.getMonth(), now.getDate() - days));
         cmxAPI.getDailyConnectedCount(startDate, endDate, data => {
             let map = new Map();
             data = Object.entries(data);
@@ -48,8 +61,9 @@ class Chart extends Component {
             })
             let map2 = new Map();
             map.forEach((value, key) => map2.set(key, Math.round(value / weeks)));
+            let [chartLabels, chartData] = this.generateChartData(map2);
             // console.log("map",map, map2);
-            this.setState( {chartData: [map2.get(0), map2.get(1), map2.get(2), map2.get(3), map2.get(4), map2.get(5), map2.get(6)]} )
+            this.setState( {chartData, chartLabels} )
         });
     }
 
@@ -60,7 +74,7 @@ class Chart extends Component {
                     <Col item  sm={12} lg={8}>
                     <Bar
                         data = {{
-                            labels:['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+                            labels: this.state.chartLabels,
                             datasets:[
                                 {
                                     label:'Number of visitors',
@@ -80,7 +94,7 @@ class Chart extends Component {
                         options={{ 
                             title:{
                                 display:this.props.displayTitle,
-                                text: 'Forecasting number of visitors for next week',
+                                text: 'Forecasting number of visitors for next 7 days',
                                 fontSize: 20,
                             },
                             legend:{

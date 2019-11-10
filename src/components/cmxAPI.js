@@ -13,7 +13,7 @@ class cmxAPI {
     notifier = new AWN({});
 
     handleError = (error) => {
-        this.notifier.alert("WTF?"); 
+        this.notifier.alert("SERVER ERROR"); 
     }
 
     getFloorImage(floorName, cb) {
@@ -257,6 +257,14 @@ class cmxAPI {
             return cb(response.data)
         }).catch(this.handleError)
     }
+    getConnectedDetecdedNow(cb){
+        axios.get(this.cmxUrl + "/api/analytics/v1/now/connectedDetected", {
+            auth: this.cmxAuth
+        }).then(response => {
+            return cb(response.data.total)
+        }).catch(this.handleError)
+    }
 }
+
 
 export default new cmxAPI()
