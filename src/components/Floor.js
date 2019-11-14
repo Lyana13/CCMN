@@ -81,13 +81,9 @@ class Floor extends React.Component {
         return updatedClients.filter(e => !oldClients.includes(e));
     }
     changeMacAddress(e){
-        const macAddress = e.target.value;
-        // console.log("e", e.target.value);
+        const macAddress = e.target.value.toLowerCase();
         this.setState({searchedMacAddress: macAddress});
         var regex = /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/;
-        // console.log(macAddress, regex.test(macAddress));
-        console.log("clientd",this.state.clients);
-        // this.state.clients.forEach(e => console.log("cli", e))
         if(regex.test(macAddress)){
             e.target.classList.remove("err");
             e.target.classList.add("valid");
@@ -138,9 +134,8 @@ class Floor extends React.Component {
                     </div>
                     <div className="side__bar">
                     <div className="wrap_search">
-                    <p><i class="fa fa-search" aria-hidden="true"></i></p>
+                    <p><i className="fa fa-search" aria-hidden="true"></i></p>
                         <p className="search">Search <input value={this.state.searchedMacAddress} onChange={this.changeMacAddress} id="header__item_search"/></p>
-                        
                     </div>
                     
                     

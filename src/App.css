@@ -136,6 +136,7 @@ li.colorTwoStep{
 
     .err{
       color: red;
+      text-align: center
     }
     .valid {
       color: green;

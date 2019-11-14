@@ -13,6 +13,22 @@ let chartBackgroundColor = ['rgba(102,51,153,1)',
 'rgba(0, 157, 58, 1)',
 'rgba(214, 254, 166, 1)'];
 
+let percentageTooltip = {
+    callbacks: {
+        label: function(tooltipItem, data) {
+            var dataset = data.datasets[tooltipItem.datasetIndex];
+            var meta = dataset._meta[Object.keys(dataset._meta)[0]];
+            var total = meta.total;
+            var currentValue = dataset.data[tooltipItem.index];
+            var percentage = parseFloat((currentValue/total*100).toFixed(1));
+            return currentValue + ' (' + percentage + '%)';
+        },
+        title: function(tooltipItem, data) {
+            return data.labels[tooltipItem[0].index];
+        }
+    }
+};
+
 class Corelation extends Component {
     
     constructor(props){
@@ -39,9 +55,9 @@ class Corelation extends Component {
             let resp = await cmxAPI.dwellAverage(start, start);
             data[start] = resp;
         }
-            let sessionDurationData =  this.groupByDaysOfTheWeek(data);
+            let sessionDurationData = this.groupByDaysOfTheWeek(data).map(num => num.toPrecision(3));
             console.log("sess", sessionDurationData);
-            this.setState( {sessionDurationData})
+            this.setState({sessionDurationData})
     }
 
     getPrevWeekDates(){
@@ -125,7 +141,8 @@ class Corelation extends Component {
                             legend:{
                                 display: false,
                                 position: 'top'
-                            }
+                            },
+                            tooltips: percentageTooltip
                         }}
                     />
                     </Col>
@@ -149,7 +166,8 @@ class Corelation extends Component {
                             legend:{
                                 display: false,
                                 position: 'left'
-                            }
+                            },
+                            tooltips: percentageTooltip
                         }}
                     />
                     </Col>
@@ -158,4 +176,5 @@ class Corelation extends Component {
         )
     }
 }
+
 export default Corelation;
